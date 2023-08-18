@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// Modelos
 type Usuarios struct {
 	Id         int
 	Nombre     string
@@ -18,6 +19,7 @@ type Usuarios struct {
 	Telefono   string
 }
 
+// Métodos
 type UsuariosJwt struct {
 	IdUsuario   int
 	Token       string
