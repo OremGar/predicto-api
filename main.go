@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/OremGar/predicto-api/bd"
+	"github.com/OremGar/predicto-api/controladores"
 	"github.com/OremGar/predicto-api/funciones"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
@@ -19,6 +20,8 @@ var (
 func Router() (http.Handler, *cors.Cors) {
 	var r *mux.Router = mux.NewRouter() //Creación del router
 	var corsOpc *cors.Cors
+
+	r.HandleFunc("/api/v1/saludo", controladores.Saludo).Methods(http.MethodGet)
 
 	corsOpc = cors.New(cors.Options{
 		AllowedOrigins: []string{
