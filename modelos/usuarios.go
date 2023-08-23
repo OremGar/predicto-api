@@ -19,11 +19,15 @@ type Usuarios struct {
 	Telefono   string
 }
 
-// Métodos
 type UsuariosJwt struct {
 	IdUsuario   int
 	Token       string
 	FechaInicio time.Time
+}
+
+// Métodos
+func (UsuariosJwt) TableName() string {
+	return "usuarios_jwt"
 }
 
 func ChecarSiUsuarioExiste(id int) (Usuarios, error) {
