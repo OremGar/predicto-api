@@ -99,7 +99,7 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 
 	r.Header.Set("Authentication", token)
 
-	respuestas.JsonResponse(w, http.StatusOK, usuario.Id, 0, nil)
+	respuestas.JsonResponse(w, http.StatusOK, registroJWT, 0, nil)
 }
 
 func Saludo(w http.ResponseWriter, r *http.Request) {
