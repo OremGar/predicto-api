@@ -23,17 +23,17 @@ func init() {
 
 	bytesPublica, err := os.ReadFile("./llaves/jwt_public.pem")
 	if err != nil {
-		log.Fatal("No se pudo leer el archivo público", err)
+		log.Fatal("No se pudo leer el archivo público: ", err)
 	}
 
 	llavePrivada, err = jwt.ParseRSAPrivateKeyFromPEM(bytesPrivada)
 	if err != nil {
-		log.Fatal("No se pudo hacer el parse a privatekey")
+		log.Fatal("No se pudo hacer el parse a privatekey: ", err)
 	}
 
 	llavePublica, err = jwt.ParseRSAPublicKeyFromPEM(bytesPublica)
 	if err != nil {
-		log.Fatal("No se pudo hacer el parse a publickey")
+		log.Fatal("No se pudo hacer el parse a publickey: ", err)
 	}
 }
 
