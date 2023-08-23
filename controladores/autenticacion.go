@@ -11,10 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func SignIn(w http.ResponseWriter, r *http.Request) {
-
-}
-
+// Función para dar de alta usuarios
 func SignUp(w http.ResponseWriter, r *http.Request) {
 	var usuario modelos.Usuarios = modelos.Usuarios{}
 
@@ -51,6 +48,36 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respuestas.JsonResponse(w, http.StatusCreated, usuario.Id, 0, nil)
+}
+
+func SignIn(w http.ResponseWriter, r *http.Request) {
+	var usuario modelos.Usuarios = modelos.Usuarios{}
+	var contrasenaPeticion = r.FormValue("contrasena")
+
+	usuario.Usuario = r.FormValue("usuario")
+	usuario.Correo = r.FormValue("correo")
+
+	var db *gorm.DB = bd.ConnectDB()
+	sqldb, _ := db.DB()
+	defer sqldb.Close()
+
+	result := db.Model(&usuario).Where("usuario = ? OR correo = ?", usuario.Usuario, usuario.Correo).First(&usuario)
+	if result.Error != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
+		return
+	}
+	if result.RowsAffected == 0 {
+		respuestas.SetError(w, http.StatusNotFound, 100, fmt.Errorf("el usuario no existe"))
+		return
+	}
+
+	validado := funciones.ValidaContrasena(contrasenaPeticion, usuario.Contrasena)
+	if !validado {
+		respuestas.SetError(w, http.StatusNotFound, 100, fmt.Errorf("contraseña incorrecta"))
+		return
+	}
+
+	respuestas.JsonResponse(w, http.StatusOK, usuario.Id, 0, nil)
 }
 
 func Saludo(w http.ResponseWriter, r *http.Request) {
