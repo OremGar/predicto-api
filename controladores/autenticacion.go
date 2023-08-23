@@ -52,7 +52,3 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 
 	respuestas.JsonResponse(w, http.StatusCreated, usuario.Id, 0, nil)
 }
-
-func Saludo(w http.ResponseWriter, r *http.Request) {
-	respuestas.JsonResponse(w, http.StatusOK, "Saludos", 0, nil)
-}
