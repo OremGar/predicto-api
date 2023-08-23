@@ -101,7 +101,3 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 
 	respuestas.JsonResponse(w, http.StatusOK, registroJWT, 0, nil)
 }
-
-func Saludo(w http.ResponseWriter, r *http.Request) {
-	respuestas.JsonResponse(w, http.StatusOK, "Saludos", 0, nil)
-}

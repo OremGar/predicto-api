@@ -7,6 +7,7 @@ import (
 
 	"github.com/OremGar/predicto-api/controladores"
 	"github.com/OremGar/predicto-api/funciones"
+	"github.com/OremGar/predicto-api/middlewares"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 )
@@ -18,9 +19,12 @@ var (
 func Router() (http.Handler, *cors.Cors) {
 	var r *mux.Router = mux.NewRouter() //Creación del router
 	var corsOpc *cors.Cors
+	var wrappedMux http.Handler
 
-	r.HandleFunc("/api/v1/signup", controladores.SignUp).Methods(http.MethodPost)
-	r.HandleFunc("/api/v1/signin", controladores.SignIn).Methods(http.MethodPost)
+	r.HandleFunc("/api/v1/cuenta/SignUp", controladores.SignUp).Methods(http.MethodPost)
+	r.HandleFunc("/api/v1/cuenta/SignIn", controladores.SignIn).Methods(http.MethodPost)
+
+	wrappedMux = middlewares.ValidarToken(r.ServeHTTP)
 
 	corsOpc = cors.New(cors.Options{
 		AllowedOrigins: []string{
@@ -40,7 +44,7 @@ func Router() (http.Handler, *cors.Cors) {
 		AllowCredentials: true,
 	})
 
-	return r, corsOpc
+	return wrappedMux, corsOpc
 }
 
 func main() {

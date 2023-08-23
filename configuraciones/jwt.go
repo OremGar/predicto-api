@@ -2,6 +2,7 @@ package configuraciones
 
 import (
 	"crypto/rsa"
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -37,9 +38,7 @@ func init() {
 	}
 }
 
-// todo: --------------------------------------------
-// todo: funcion para generar el token del usuario
-// todo: --------------------------------------------
+// Función para generar Json Web Tokens
 func GenerarJWT(idUsuario int) (string, error) {
 	var claims *modelos.Claims = &modelos.Claims{
 		IdUsuario: idUsuario,
@@ -54,4 +53,22 @@ func GenerarJWT(idUsuario int) (string, error) {
 		return "", err
 	}
 	return tokenString, nil
+}
+
+func ValidarJWT(token string) (bool, error, modelos.Claims) {
+	var claims *modelos.Claims = &modelos.Claims{}
+
+	tkn, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
+		return llavePublica, nil
+	})
+	if err != nil {
+		if err == jwt.ErrSignatureInvalid {
+			return false, fmt.Errorf("error al validar JWT, firma inválida"), modelos.Claims{}
+		}
+	}
+	if !tkn.Valid {
+		return false, fmt.Errorf("JWT no válido"), modelos.Claims{}
+	}
+
+	return true, nil, *claims
 }
