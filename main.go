@@ -5,9 +5,11 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/OremGar/predicto-api/bd"
 	"github.com/OremGar/predicto-api/funciones"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
+	"gorm.io/gorm"
 )
 
 var (
@@ -41,6 +43,10 @@ func Router() (http.Handler, *cors.Cors) {
 
 func main() {
 	r, corsOpt := Router()
+
+	var db *gorm.DB = bd.ConnectDB()
+	sqldb, _ := db.DB()
+	defer sqldb.Close()
 
 	log.Println("Iniciando servidor en el puerto:", PUERTO)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", PUERTO), corsOpt.Handler(r)))
