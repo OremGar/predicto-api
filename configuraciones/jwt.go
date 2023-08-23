@@ -16,12 +16,12 @@ var (
 )
 
 func init() {
-	bytesPrivada, err := os.ReadFile("./api/v1/controllers/rsa/jwtPrivate.pem")
+	bytesPrivada, err := os.ReadFile("./llaves/jwt_private.pem")
 	if err != nil {
 		log.Fatal("No se pudo leer el archivo privado: ", err)
 	}
 
-	bytesPublica, err := os.ReadFile("./api/v1/controllers/rsa/jwtPublic.pem")
+	bytesPublica, err := os.ReadFile("./llaves/jwt_public.pem")
 	if err != nil {
 		log.Fatal("No se pudo leer el archivo público", err)
 	}
