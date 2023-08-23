@@ -20,6 +20,7 @@ func Router() (http.Handler, *cors.Cors) {
 	var corsOpc *cors.Cors
 
 	r.HandleFunc("/api/v1/signup", controladores.SignUp).Methods(http.MethodPost)
+	r.HandleFunc("/api/v1/signin", controladores.SignIn).Methods(http.MethodPost)
 
 	corsOpc = cors.New(cors.Options{
 		AllowedOrigins: []string{
