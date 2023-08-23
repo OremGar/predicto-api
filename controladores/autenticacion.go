@@ -92,7 +92,7 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		FechaInicio: time.Now(),
 	}
 
-	result = db.Save(&registroJWT)
+	result = db.Create(&registroJWT)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
