@@ -3,8 +3,10 @@ package controladores
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/OremGar/predicto-api/bd"
+	"github.com/OremGar/predicto-api/configuraciones"
 	"github.com/OremGar/predicto-api/funciones"
 	"github.com/OremGar/predicto-api/modelos"
 	"github.com/OremGar/predicto-api/respuestas"
@@ -53,6 +55,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 func SignIn(w http.ResponseWriter, r *http.Request) {
 	var usuario modelos.Usuarios = modelos.Usuarios{}
 	var contrasenaPeticion = r.FormValue("contrasena")
+	var registroJWT modelos.UsuariosJwt = modelos.UsuariosJwt{}
 
 	usuario.Usuario = r.FormValue("usuario")
 	usuario.Correo = r.FormValue("correo")
@@ -76,6 +79,25 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		respuestas.SetError(w, http.StatusNotFound, 100, fmt.Errorf("contraseña incorrecta"))
 		return
 	}
+
+	token, err := configuraciones.GenerarJWT(usuario.Id)
+	if err != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, err)
+		return
+	}
+
+	registroJWT = modelos.UsuariosJwt{
+		IdUsuario:   usuario.Id,
+		Token:       token,
+		FechaInicio: time.Now(),
+	}
+
+	result = db.Save(&registroJWT)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	r.Header.Set("Authentication", token)
 
 	respuestas.JsonResponse(w, http.StatusOK, usuario.Id, 0, nil)
 }
