@@ -19,7 +19,7 @@ func Router() (http.Handler, *cors.Cors) {
 	var r *mux.Router = mux.NewRouter() //Creación del router
 	var corsOpc *cors.Cors
 
-	r.HandleFunc("/api/v1/saludo", controladores.Saludo).Methods(http.MethodGet)
+	r.HandleFunc("/api/v1/signup", controladores.SignUp).Methods(http.MethodPost)
 
 	corsOpc = cors.New(cors.Options{
 		AllowedOrigins: []string{
