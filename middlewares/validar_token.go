@@ -31,6 +31,7 @@ func ValidarToken(peticion http.HandlerFunc) http.Handler {
 
 		if strings.HasPrefix(r.URL.Path, "/api/v1/cuenta") {
 			peticion.ServeHTTP(w, r)
+			return
 		}
 
 		_, claims, err := configuraciones.ValidarJWT(token)
