@@ -55,7 +55,7 @@ func GenerarJWT(idUsuario int) (string, error) {
 	return tokenString, nil
 }
 
-func ValidarJWT(token string) (bool, error, modelos.Claims) {
+func ValidarJWT(token string) (bool, modelos.Claims, error) {
 	var claims *modelos.Claims = &modelos.Claims{}
 
 	tkn, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
@@ -63,12 +63,12 @@ func ValidarJWT(token string) (bool, error, modelos.Claims) {
 	})
 	if err != nil {
 		if err == jwt.ErrSignatureInvalid {
-			return false, fmt.Errorf("error al validar JWT, firma inválida"), modelos.Claims{}
+			return false, modelos.Claims{}, fmt.Errorf("error al validar JWT, firma inválida")
 		}
 	}
 	if !tkn.Valid {
-		return false, fmt.Errorf("JWT no válido"), modelos.Claims{}
+		return false, modelos.Claims{}, fmt.Errorf("JWT no válido")
 	}
 
-	return true, nil, *claims
+	return true, *claims, nil
 }

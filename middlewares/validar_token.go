@@ -21,11 +21,19 @@ func ValidarToken(peticion http.HandlerFunc) http.Handler {
 		sqldb, _ := db.DB()
 		defer sqldb.Close()
 
-		if strings.HasPrefix(r.URL.Path, "/api/v1/cuenta/") {
+		fmt.Println(r.URL.Path)
+
+		fmt.Println(r.URL.Path)
+
+		fmt.Println(r.URL.Path)
+
+		fmt.Println(r.URL.Path)
+
+		if strings.HasPrefix(r.URL.Path, "/api/v1/cuenta") {
 			peticion.ServeHTTP(w, r)
 		}
 
-		_, err, claims := configuraciones.ValidarJWT(token)
+		_, claims, err := configuraciones.ValidarJWT(token)
 		if err != nil {
 			respuestas.SetError(w, http.StatusUnauthorized, 100, fmt.Errorf("token no válido"))
 			return
