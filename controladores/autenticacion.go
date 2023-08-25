@@ -43,7 +43,27 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result := db.Save(&usuario).First(&usuario)
+	result := db.Model(&usuario).Where("usuario = ?", usuario.Usuario)
+	if result.Error != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
+		return
+	}
+	if result.RowsAffected > 0 {
+		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el usuario '%v' ya existe", usuario.Usuario))
+		return
+	}
+
+	result = db.Model(&usuario).Where("correo = ?", usuario.Correo)
+	if result.Error != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
+		return
+	}
+	if result.RowsAffected > 0 {
+		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el correo '%v' ya existe", usuario.Correo))
+		return
+	}
+
+	result = db.Save(&usuario).First(&usuario)
 	if result.Error != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
 		return
