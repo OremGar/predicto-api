@@ -16,6 +16,7 @@ import (
 // Función para dar de alta usuarios
 func SignUp(w http.ResponseWriter, r *http.Request) {
 	var usuario modelos.Usuarios = modelos.Usuarios{}
+	var existe bool
 
 	var db *gorm.DB = bd.ConnectDB()
 	sqldb, _ := db.DB()
@@ -43,24 +44,20 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result := db.Model(&usuario).Where("usuario = ?", usuario.Usuario).First(&modelos.Usuarios{})
+	result := db.Model(&usuario).Select("count(*) > 0").Where("usuario = ?", usuario.Usuario).Find(&existe)
 	if result.Error != nil {
-		if result.Error != fmt.Errorf("record not found") {
-			respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
-			return
-		}
+		respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
+		return
 	}
 	if result.RowsAffected > 0 {
 		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el usuario '%v' ya existe", usuario.Usuario))
 		return
 	}
 
-	result = db.Model(&usuario).Where("correo = ?", usuario.Correo).First(&modelos.Usuarios{})
+	result = db.Model(&usuario).Select("count(*) > 0").Where("correo = ?", usuario.Correo).Find(&existe)
 	if result.Error != nil {
-		if result.Error != fmt.Errorf("record not found") {
-			respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
-			return
-		}
+		respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
+		return
 	}
 	if result.RowsAffected > 0 {
 		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el correo '%v' ya existe", usuario.Correo))
