@@ -1,19 +1,11 @@
 package middlewares
 
 import (
-	"fmt"
 	"net/http"
-	"strings"
-
-	"github.com/OremGar/predicto-api/bd"
-	"github.com/OremGar/predicto-api/configuraciones"
-	"github.com/OremGar/predicto-api/modelos"
-	"github.com/OremGar/predicto-api/respuestas"
-	"gorm.io/gorm"
 )
 
 func ValidarToken(peticion http.HandlerFunc) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	/*return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var token string = r.Header.Get("Authorization")
 		var usuario modelos.Usuarios
 
@@ -64,6 +56,9 @@ func ValidarToken(peticion http.HandlerFunc) http.Handler {
 			return
 		}
 
+		peticion.ServeHTTP(w, r)
+	})*/
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		peticion.ServeHTTP(w, r)
 	})
 }
