@@ -45,8 +45,10 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 
 	result := db.Model(&usuario).Where("usuario = ?", usuario.Usuario).First(&modelos.Usuarios{})
 	if result.Error != nil {
-		respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
-		return
+		if result.Error != fmt.Errorf("record not found") {
+			respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
+			return
+		}
 	}
 	if result.RowsAffected > 0 {
 		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el usuario '%v' ya existe", usuario.Usuario))
@@ -55,8 +57,10 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 
 	result = db.Model(&usuario).Where("correo = ?", usuario.Correo).First(&modelos.Usuarios{})
 	if result.Error != nil {
-		respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
-		return
+		if result.Error != fmt.Errorf("record not found") {
+			respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
+			return
+		}
 	}
 	if result.RowsAffected > 0 {
 		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el correo '%v' ya existe", usuario.Correo))
