@@ -21,14 +21,6 @@ func ValidarToken(peticion http.HandlerFunc) http.Handler {
 		sqldb, _ := db.DB()
 		defer sqldb.Close()
 
-		fmt.Println(r.URL.Path)
-
-		fmt.Println(r.URL.Path)
-
-		fmt.Println(r.URL.Path)
-
-		fmt.Println(r.URL.Path)
-
 		if strings.HasPrefix(r.URL.Path, "/api/v1/cuenta") {
 			peticion.ServeHTTP(w, r)
 			return
