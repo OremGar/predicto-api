@@ -43,7 +43,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result := db.Model(&usuario).Where("usuario = ?", usuario.Usuario)
+	result := db.Model(&usuario).Where("usuario = ?", usuario.Usuario).First(&modelos.Usuarios{})
 	if result.Error != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
 		return
@@ -53,7 +53,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result = db.Model(&usuario).Where("correo = ?", usuario.Correo)
+	result = db.Model(&usuario).Where("correo = ?", usuario.Correo).First(&modelos.Usuarios{})
 	if result.Error != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
 		return
