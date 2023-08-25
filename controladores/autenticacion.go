@@ -49,7 +49,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
 		return
 	}
-	if result.RowsAffected > 0 {
+	if existe {
 		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el usuario '%v' ya existe", usuario.Usuario))
 		return
 	}
@@ -59,7 +59,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
 		return
 	}
-	if result.RowsAffected > 0 {
+	if existe {
 		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el correo '%v' ya existe", usuario.Correo))
 		return
 	}
