@@ -34,6 +34,11 @@ func Router() (http.Handler, *cors.Cors) {
 
 		AllowedMethods: []string{
 			"*",
+			http.MethodGet, //http methods for your app
+			http.MethodPost,
+			http.MethodPut,
+			http.MethodDelete,
+			http.MethodOptions,
 		},
 
 		AllowedHeaders: []string{
