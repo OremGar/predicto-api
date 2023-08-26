@@ -45,7 +45,12 @@ func ValidarToken(peticion http.HandlerFunc) http.Handler {
 			return
 		}
 
-		result = db.Model(&modelos.UsuariosJwt{}).Select("count(*) > 0").Where("token = '?'", token).Find(&existe)
+		fmt.Println(token)
+		fmt.Println(db.ToSQL(func(tx *gorm.DB) *gorm.DB {
+			return db.Model(&modelos.UsuariosJwt{}).Select("count(*) > 0").Where("token = ?", token).Find(&existe)
+		}))
+
+		result = db.Model(&modelos.UsuariosJwt{}).Select("count(*) > 0").Where("token = ?", token).Find(&existe)
 		if result.Error != nil {
 			respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
 			return
