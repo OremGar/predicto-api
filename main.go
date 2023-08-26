@@ -28,9 +28,9 @@ func Router() (http.Handler, *cors.Cors) {
 
 	corsOpc = cors.New(cors.Options{
 		AllowedOrigins: []string{
-			"*",
-			"http://localhost:3000",
 			"http://oremserver.duckdns.org:8081",
+			"http://localhost:3000",
+			"*",
 		},
 
 		AllowedMethods: []string{
