@@ -25,7 +25,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	usuario.Nombre = r.FormValue("nombre")
 	usuario.Apellidos = r.FormValue("apellidos")
 	usuario.Correo = r.FormValue("correo")
-	if !funciones.ValidaCorreo(usuario.Correo) {
+	if funciones.ValidaCorreo(usuario.Correo) {
 		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el correo no está en el formato correcto"))
 		return
 	}
