@@ -58,6 +58,10 @@ func GenerarJWT(idUsuario int) (string, error) {
 func ValidarJWT(token string) (bool, modelos.Claims, error) {
 	var claims *modelos.Claims = &modelos.Claims{}
 
+	if token == "" {
+		return false, modelos.Claims{}, fmt.Errorf("no existe token en la petición")
+	}
+
 	tkn, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
 		return llavePublica, nil
 	})

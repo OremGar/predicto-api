@@ -24,6 +24,8 @@ func Router() (http.Handler, *cors.Cors) {
 	r.HandleFunc("/api/v1/cuenta/SignUp", controladores.SignUp).Methods(http.MethodPost)
 	r.HandleFunc("/api/v1/cuenta/SignIn", controladores.SignIn).Methods(http.MethodPost)
 
+	r.HandleFunc("/api/v1/cuenta/SignUp", controladores.Prueba).Methods(http.MethodGet)
+
 	wrappedMux = middlewares.ValidarToken(r.ServeHTTP)
 
 	corsOpc = cors.New(cors.Options{
