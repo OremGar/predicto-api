@@ -30,6 +30,7 @@ func Router() (http.Handler, *cors.Cors) {
 		AllowedOrigins: []string{
 			"*",
 			"http://localhost:3000",
+			"http://oremserver.duckdns.org:8081",
 		},
 
 		AllowedMethods: []string{
