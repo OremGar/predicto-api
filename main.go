@@ -29,6 +29,7 @@ func Router() (http.Handler, *cors.Cors) {
 	corsOpc = cors.New(cors.Options{
 		AllowedOrigins: []string{
 			"*",
+			"http://localhost:3000",
 		},
 
 		AllowedMethods: []string{
