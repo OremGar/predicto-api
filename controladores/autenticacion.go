@@ -3,6 +3,7 @@ package controladores
 import (
 	"fmt"
 	"net/http"
+	"net/mail"
 	"time"
 
 	"github.com/OremGar/predicto-api/bd"
@@ -25,7 +26,8 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	usuario.Nombre = r.FormValue("nombre")
 	usuario.Apellidos = r.FormValue("apellidos")
 	usuario.Correo = r.FormValue("correo")
-	if funciones.ValidaCorreo(usuario.Correo) {
+	_, err := mail.ParseAddress(usuario.Correo)
+	if err != nil {
 		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el correo no está en el formato correcto"))
 		return
 	}
