@@ -89,11 +89,11 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 
 	result := db.Model(&usuario).Where("usuario = ? OR correo = ?", usuario.Usuario, usuario.Correo).First(&usuario)
 	if result.Error != nil {
+		if result.Error == gorm.ErrRecordNotFound {
+			respuestas.SetError(w, http.StatusNotFound, 100, fmt.Errorf("el usuario no existe"))
+			return
+		}
 		respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
-		return
-	}
-	if result.RowsAffected == 0 {
-		respuestas.SetError(w, http.StatusNotFound, 100, fmt.Errorf("el usuario no existe"))
 		return
 	}
 
