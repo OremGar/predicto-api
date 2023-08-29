@@ -122,6 +122,8 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 
 	r.Header.Set("Authentication", token)
 
+	fmt.Println(token)
+
 	respuestas.JsonResponse(w, http.StatusOK, registroJWT, 0, nil)
 }
 
