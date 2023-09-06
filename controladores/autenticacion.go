@@ -129,4 +129,5 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 
 func Prueba(w http.ResponseWriter, r *http.Request) {
 	respuestas.JsonResponse(w, http.StatusOK, "Saludos", 0, nil)
+	return
 }
