@@ -23,12 +23,14 @@ func init() {
 		log.Fatalf("Error al obtener la ruta actual: %v\n", err)
 	}
 
-	bytesPrivada, err := os.ReadFile(ruta + "./llaves/private_key.pem")
+	log.Print(ruta)
+
+	bytesPrivada, err := os.ReadFile(ruta + "/llaves/private_key.pem")
 	if err != nil {
 		log.Fatalf("No se pudo leer el archivo privado '%v': %v", ruta+"llaves/private_key.pem", err)
 	}
 
-	bytesPublica, err := os.ReadFile(ruta + "./llaves/public_key.pem")
+	bytesPublica, err := os.ReadFile(ruta + "/llaves/public_key.pem")
 	if err != nil {
 		log.Fatalf("No se pudo leer el archivo público '%v': %v ", ruta+"llaves/public_key.pem", err)
 	}
