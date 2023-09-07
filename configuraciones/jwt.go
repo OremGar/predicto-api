@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/OremGar/predicto-api/modelos"
@@ -17,12 +18,18 @@ var (
 )
 
 func init() {
-	bytesPrivada, err := os.ReadFile("./llaves/private_key.pem")
+	//Se obtiene el directorio actual
+	ruta, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		log.Fatalf("Error al obtener la ruta actual: %v\n", err)
+	}
+
+	bytesPrivada, err := os.ReadFile(ruta + "/llaves/private_key.pem")
 	if err != nil {
 		log.Fatal("No se pudo leer el archivo privado: ", err)
 	}
 
-	bytesPublica, err := os.ReadFile("./llaves/public_key.pem")
+	bytesPublica, err := os.ReadFile(ruta + "/llaves/public_key.pem")
 	if err != nil {
 		log.Fatal("No se pudo leer el archivo público: ", err)
 	}
