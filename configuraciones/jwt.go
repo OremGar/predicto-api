@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
 	"time"
 
 	"github.com/OremGar/predicto-api/modelos"
@@ -19,10 +18,7 @@ var (
 
 func init() {
 	//Se obtiene el directorio actual
-	ruta, err := filepath.Abs(filepath.Dir(os.Args[0]))
-	if err != nil {
-		log.Fatalf("Error al obtener la ruta actual: %v\n", err)
-	}
+	var ruta = "~/Predicto/predicto-api"
 
 	bytesPrivada, err := os.ReadFile(ruta + "/llaves/private_key.pem")
 	if err != nil {
