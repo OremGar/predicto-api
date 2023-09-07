@@ -25,6 +25,7 @@ func init() {
 
 	log.Print(ruta)
 
+	log.Println(ruta + "/llaves/private_key.pem")
 	bytesPrivada, err := os.ReadFile(ruta + "/llaves/private_key.pem")
 	if err != nil {
 		log.Fatalf("No se pudo leer el archivo privado '%v': %v", ruta+"/llaves/private_key.pem", err)
