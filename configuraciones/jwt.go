@@ -18,7 +18,12 @@ var (
 
 func init() {
 	//Se obtiene el directorio actual
-	var ruta = "~/Predicto/predicto-api"
+	ruta, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("Error al obtener la ruta actual: %v\n", err)
+	}
+
+	fmt.Println(ruta)
 
 	bytesPrivada, err := os.ReadFile(ruta + "/llaves/private_key.pem")
 	if err != nil {
