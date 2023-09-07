@@ -23,7 +23,7 @@ func init() {
 		log.Fatalf("Error al obtener la ruta actual: %v\n", err)
 	}
 
-	log.Fatal(ruta)
+	log.Print(ruta)
 
 	bytesPrivada, err := os.ReadFile(ruta + "/llaves/private_key.pem")
 	if err != nil {
