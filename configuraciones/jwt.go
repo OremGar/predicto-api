@@ -27,12 +27,12 @@ func init() {
 
 	bytesPrivada, err := os.ReadFile(ruta + "/llaves/private_key.pem")
 	if err != nil {
-		log.Fatal("No se pudo leer el archivo privado: ", err)
+		log.Fatalf("No se pudo leer el archivo privado '%v': %v", ruta+"/llaves/private_key.pem", err)
 	}
 
 	bytesPublica, err := os.ReadFile(ruta + "/llaves/public_key.pem")
 	if err != nil {
-		log.Fatal("No se pudo leer el archivo público: ", err)
+		log.Fatalf("No se pudo leer el archivo público '%v': %v ", ruta+"/llaves/public_key.pem", err)
 	}
 
 	llavePrivada, err = jwt.ParseRSAPrivateKeyFromPEM(bytesPrivada)
