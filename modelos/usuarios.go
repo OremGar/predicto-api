@@ -10,19 +10,25 @@ import (
 
 // Modelos
 type Usuarios struct {
-	Id         int
-	Nombre     string
-	Apellidos  string
-	Usuario    string
-	Correo     string
-	Contrasena string
-	Telefono   string
+	Id         int    `json:"id"`
+	Nombre     string `json:"nombre"`
+	Apellidos  string `json:"apellidos"`
+	Usuario    string `json:"usuario"`
+	Correo     string `json:"correo"`
+	Contrasena string `json:"contrasena"`
+	Telefono   string `json:"telefono"`
 }
 
 type UsuariosJwt struct {
-	IdUsuario   int
-	Token       string
-	FechaInicio time.Time
+	IdUsuario   int       `json:"id_usuario"`
+	Token       string    `json:"token"`
+	FechaInicio time.Time `json:"fecha_inicio"`
+}
+
+type UsuariosOtp struct {
+	IdUsuario     int       `json:"id_usuario"`
+	CodigoOtp     string    `json:"codigo_otp"`
+	FechaCreacion time.Time `json:"fecha_creacion"`
 }
 
 // Métodos

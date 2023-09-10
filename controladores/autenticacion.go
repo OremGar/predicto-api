@@ -127,7 +127,53 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 	respuestas.JsonResponse(w, http.StatusOK, registroJWT, 0, nil)
 }
 
+func RecuperaContrasena(w http.ResponseWriter, r *http.Request) {
+	var correo string = r.FormValue("correo")
+	var usuario modelos.Usuarios = modelos.Usuarios{}
+	var usuarioOtp modelos.UsuariosOtp = modelos.UsuariosOtp{}
+	var otp string
+
+	var db *gorm.DB = bd.ConnectDB()
+	sqldb, _ := db.DB()
+	defer sqldb.Close()
+
+	if correo == "" {
+		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("la solicitud no incluye correo"))
+		return
+	}
+
+	resultado := db.Model(usuario).Where("correo = ?", correo).First(&usuario)
+	if resultado.Error != nil {
+		if resultado.Error == gorm.ErrRecordNotFound {
+			respuestas.SetError(w, http.StatusNotFound, 100, fmt.Errorf("el correo ingresado no existe en el sistema"))
+			return
+		}
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("problema interno: %v", resultado.Error))
+		return
+	}
+
+	otp = funciones.GeneraOTP(6)
+	err := funciones.EnviaCorreoOTP(correo, otp)
+	if err != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error al enviar correo: %v", err))
+		return
+	}
+
+	usuarioOtp = modelos.UsuariosOtp{
+		IdUsuario:     usuario.Id,
+		CodigoOtp:     otp,
+		FechaCreacion: time.Now(),
+	}
+
+	resultado = db.Save(&usuarioOtp)
+	if resultado.Error != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error al guardar otp: %v", err))
+		return
+	}
+
+	respuestas.JsonResponse(w, http.StatusOK, nil, 0, nil)
+}
+
 func Prueba(w http.ResponseWriter, r *http.Request) {
 	respuestas.JsonResponse(w, http.StatusOK, "Saludos", 0, nil)
-	return
 }
