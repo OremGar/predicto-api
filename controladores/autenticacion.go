@@ -162,7 +162,7 @@ func RecuperaContrasena(w http.ResponseWriter, r *http.Request) {
 	usuarioOtp = modelos.UsuariosOtp{
 		IdUsuario:     usuario.Id,
 		CodigoOtp:     otp,
-		FechaCreacion: db.NowFunc(),
+		FechaCreacion: time.Now(),
 	}
 
 	resultado = db.Create(&usuarioOtp)
