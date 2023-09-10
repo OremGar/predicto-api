@@ -13,6 +13,7 @@ type Correo struct {
 	Destino string
 	Asunto  string
 	Cuerpo  bytes.Buffer
+	Mime    string
 }
 
 var (
@@ -51,6 +52,7 @@ func EnviaCorreoOTP(destino string, otp string) error {
 		Destino: destino,
 		Asunto:  ASUNTO,
 		Cuerpo:  cuerpo,
+		Mime:    "1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n",
 	}
 
 	contenido = ConstruyeCorreo(peticion)
@@ -81,6 +83,7 @@ func ConstruyeCorreo(correo Correo) string {
 	msg += fmt.Sprintf("From: %s\r\n", correo.Origen)
 	msg += fmt.Sprintf("To: %s\r\n", correo.Destino)
 	msg += fmt.Sprintf("Subject: %s\r\n", correo.Asunto)
+	msg += fmt.Sprintf("MIME-version: %s\r\n", correo.Mime)
 	msg += fmt.Sprintf("\r\n%s\r\n", correo.Cuerpo.String())
 
 	return msg
