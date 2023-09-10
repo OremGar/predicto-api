@@ -165,7 +165,7 @@ func RecuperaContrasena(w http.ResponseWriter, r *http.Request) {
 		FechaCreacion: time.Now(),
 	}
 
-	resultado = db.Save(&usuarioOtp)
+	resultado = db.Create(&usuarioOtp)
 	if resultado.Error != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error al guardar otp: %v", err))
 		return
