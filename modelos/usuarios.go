@@ -36,6 +36,10 @@ func (UsuariosJwt) TableName() string {
 	return "usuarios_jwt"
 }
 
+func (UsuariosOtp) TableName() string {
+	return "usuarios_otp"
+}
+
 func ChecarSiUsuarioExiste(id int) (Usuarios, error) {
 	var usuario Usuarios = Usuarios{}
 
