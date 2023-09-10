@@ -6,9 +6,14 @@ import (
 	"html/template"
 	"net/smtp"
 	"os"
-
-	"github.com/OremGar/predicto-api/modelos"
 )
+
+type Correo struct {
+	Origen  string
+	Destino string
+	Asunto  string
+	Cuerpo  bytes.Buffer
+}
 
 var (
 	CORREO    = GetDotEnvVar("CORREO")
@@ -22,7 +27,7 @@ var (
 func EnviaCorreoOTP(destino string, otp string) error {
 	var credenciales smtp.Auth = AuthCorreo() //Se obtienen las credenciales para enviar el correo
 	var cuerpo bytes.Buffer = bytes.Buffer{}
-	var peticion modelos.Correo = modelos.Correo{}
+	var peticion Correo = Correo{}
 	var contenido string
 
 	ruta, err := os.Getwd() //Se obtiene la ruta de la carpeta del proyecto para obtener la plantilla
@@ -41,7 +46,7 @@ func EnviaCorreoOTP(destino string, otp string) error {
 		Otp: otp,
 	})
 
-	peticion = modelos.Correo{
+	peticion = Correo{
 		Origen:  CORREO,
 		Destino: destino,
 		Asunto:  ASUNTO,
@@ -71,7 +76,7 @@ func AuthCorreo() smtp.Auth {
 }
 
 // Función para construir la estructura de un correo
-func ConstruyeCorreo(correo modelos.Correo) string {
+func ConstruyeCorreo(correo Correo) string {
 	msg := ""
 	msg += fmt.Sprintf("From: %s\r\n", correo.Origen)
 	msg += fmt.Sprintf("To: %s\r\n", correo.Destino)
