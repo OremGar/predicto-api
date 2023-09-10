@@ -1,11 +1,8 @@
 package funciones
 
 import (
-	"bytes"
 	"fmt"
-	"html/template"
 	"net/smtp"
-	"os"
 )
 
 var (
@@ -18,31 +15,38 @@ var (
 )
 
 func EnviaCorreoOTP(destino string, otp string) error {
-	var credenciales smtp.Auth = AuthCorreo()                                                      //Se obtienen las credenciales para enviar el correo
-	var destinos []string = []string{destino}                                                      //Se agrega al único destino al slice
-	var cuerpo bytes.Buffer                                                                        //Se crea objeto para añadir información al buffer
-	var mimeHeaders string = "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n" //Encabezados para la plantilla HTML
+	var credenciales smtp.Auth = AuthCorreo() //Se obtienen las credenciales para enviar el correo
+	var destinos []string = []string{destino} //Se agrega al único destino al slice
+	//var cuerpo bytes.Buffer                                                                        //Se crea objeto para añadir información al buffer
+	//var mimeHeaders string = "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n" //Encabezados para la plantilla HTML
 
-	cuerpo.Write([]byte(fmt.Sprintf("Subject: %s \n%s\n\n", ASUNTO, mimeHeaders))) //Se añade el asunto y los encabezados al cuerpo
+	//cuerpo.Write([]byte(fmt.Sprintf("Subject: %s \n%s\n\n", ASUNTO, mimeHeaders))) //Se añade el asunto y los encabezados al cuerpo
 
-	ruta, err := os.Getwd() //Se obtiene la ruta de la carpeta del proyecto para obtener la plantilla
-	if err != nil {
-		return fmt.Errorf("error al obtener la ruta actual: %v", err)
-	}
+	/*
+		ruta, err := os.Getwd() //Se obtiene la ruta de la carpeta del proyecto para obtener la plantilla
+		if err != nil {
+			return fmt.Errorf("error al obtener la ruta actual: %v", err)
+		}
 
-	plantillaOtp, err := template.ParseFiles(ruta + "/plantillas/otp.html") //Se obtiene la plantilla
-	if err != nil {
-		return fmt.Errorf("error al obtener la plantilla otp: %v", err)
-	}
 
-	plantillaOtp.Execute(&cuerpo, struct { //Se incrusta la información a la plantilla
-		Otp string
-	}{
-		Otp: otp,
-	})
+		plantillaOtp, err := template.ParseFiles(ruta + "/plantillas/otp.html") //Se obtiene la plantilla
+		if err != nil {
+			return fmt.Errorf("error al obtener la plantilla otp: %v", err)
+		}
+
+		plantillaOtp.Execute(&cuerpo, struct { //Se incrusta la información a la plantilla
+			Otp string
+		}{
+			Otp: otp,
+		})*/
+
+	cuerpo := []byte("From: " + "soporte@predicto.ddns.net" + "\r\n" +
+		"To: " + destino + "\r\n" +
+		"Subject: " + ASUNTO + "\r\n\r\n" +
+		"" + otp + "\r\n")
 
 	//err = smtp.SendMail(SERVIDOR+":"+PUERTO, credenciales, CORREO, destinos, cuerpo.Bytes()) //El correo es enviado
-	err = smtp.SendMail(fmt.Sprintf("%v:%v", "mail.noip.com", 587), credenciales, "soporte@predicto.ddns.net", destinos, cuerpo.Bytes())
+	err := smtp.SendMail(fmt.Sprintf("%v:%v", "mail.noip.com", 587), credenciales, "soporte@predicto.ddns.net", destinos, cuerpo)
 	if err != nil {
 		return fmt.Errorf("error al enviar correo para el código otp: %v", err)
 	}
