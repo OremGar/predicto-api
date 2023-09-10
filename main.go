@@ -23,6 +23,7 @@ func Router() (http.Handler, *cors.Cors) {
 
 	r.HandleFunc("/api/v1/cuenta/SignUp", controladores.SignUp).Methods(http.MethodPost)
 	r.HandleFunc("/api/v1/cuenta/SignIn", controladores.SignIn).Methods(http.MethodPost)
+	r.HandleFunc("/api/v1/cuenta/RecuperaContrasena", controladores.RecuperaContrasena).Methods(http.MethodPost)
 
 	r.HandleFunc("/api/v1/prueba/saludo", controladores.Prueba).Methods(http.MethodGet)
 
