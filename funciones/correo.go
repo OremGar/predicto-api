@@ -64,7 +64,7 @@ func EnviaCorreoOTP(destino string, otp string) error {
 			"" + otp + "\r\n")*/
 
 	//err = smtp.SendMail(SERVIDOR+":"+PUERTO, credenciales, CORREO, destinos, cuerpo.Bytes()) //El correo es enviado
-	err = smtp.SendMail(fmt.Sprintf("%v:%v", "mail.noip.com", 587), credenciales, "soporte@predicto.ddns.net", []string{peticion.Destino}, []byte(contenido))
+	err = smtp.SendMail(fmt.Sprintf("%v:%v", SERVIDOR, PUERTO), credenciales, CORREO, []string{peticion.Destino}, []byte(contenido))
 	if err != nil {
 		return fmt.Errorf("error al enviar correo para el código otp: %v", err)
 	}
