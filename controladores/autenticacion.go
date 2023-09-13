@@ -162,7 +162,7 @@ func RecuperaContrasena(w http.ResponseWriter, r *http.Request) {
 	usuarioOtp = modelos.UsuariosOtp{
 		IdUsuario:     usuario.Id,
 		CodigoOtp:     otp,
-		FechaCreacion: time.Now(),
+		FechaCreacion: db.NowFunc(),
 	}
 
 	resultado = db.Create(&usuarioOtp)
@@ -174,6 +174,37 @@ func RecuperaContrasena(w http.ResponseWriter, r *http.Request) {
 	respuestas.JsonResponse(w, http.StatusOK, nil, 0, nil)
 }
 
-func Prueba(w http.ResponseWriter, r *http.Request) {
+/*
+func ValidaOTP(w http.ResponseWriter, r *http.Request) {
+	var vars map[string]string = mux.Vars(r)
+	var codigoOTP string = vars["codigo"]
+	var usuarioOTP modelos.UsuariosOtp = modelos.UsuariosOtp{}
+
+	var db *gorm.DB = bd.ConnectDB()
+	sqldb, _ := db.DB()
+	defer sqldb.Close()
+
+	if codigoOTP == "" {
+		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("no se incluyó el código OTP en la url"))
+		return
+	}
+
+	result := db.Model(&usuarioOTP).Where("codigo_otp = ?", codigoOTP).First(&usuarioOTP)
+	if result.Error != nil {
+		if result.Error == gorm.ErrRecordNotFound {
+			respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("no existe código"))
+			return
+		}
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error en la consulta: %v", result.Error))
+		return
+	}
+
+	usuarioOTP = usu
+	if usuarioOTP.FechaCreacion.Add(time.Minute * 5).Before(time.Now().UTC()) {
+
+	}
+}*/
+
+func Prueba(w http.ResponseWriter, _ *http.Request) {
 	respuestas.JsonResponse(w, http.StatusOK, "Saludos", 0, nil)
 }
