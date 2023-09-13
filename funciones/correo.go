@@ -41,7 +41,7 @@ func EnviaCorreoOTPContrasena(destino string, otp string) error {
 		return fmt.Errorf("error al obtener la plantilla otp: %v", err)
 	}
 
-	if GetDotEnvVar("PRODUCCION") != "true" {
+	if GetDotEnvVar("PRODUCCION") == "true" {
 		otp = fmt.Sprintf("https://predicto.ddns.net/RecuperarContrasena?codigo=%v", otp)
 	} else {
 		otp = fmt.Sprintf("http://localhost:3000/RecuperarContrasena?codigo=%v", otp)
