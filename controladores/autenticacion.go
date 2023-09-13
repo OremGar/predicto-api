@@ -152,8 +152,8 @@ func RecuperaContrasena(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	otp = funciones.GeneraOTP(6)
-	err := funciones.EnviaCorreoOTP(correo, otp)
+	otp = funciones.GeneraOTP(12)
+	err := funciones.EnviaCorreoOTPContrasena(correo, otp)
 	if err != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error al enviar correo: %v", err))
 		return

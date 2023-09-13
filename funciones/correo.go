@@ -25,7 +25,7 @@ var (
 	ASUNTO = "Código de verificación"
 )
 
-func EnviaCorreoOTP(destino string, otp string) error {
+func EnviaCorreoOTPContrasena(destino string, otp string) error {
 	var credenciales smtp.Auth = AuthCorreo() //Se obtienen las credenciales para enviar el correo
 	var cuerpo bytes.Buffer = bytes.Buffer{}
 	var peticion Correo = Correo{}
