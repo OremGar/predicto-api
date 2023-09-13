@@ -36,9 +36,15 @@ func EnviaCorreoOTPContrasena(destino string, otp string) error {
 		return fmt.Errorf("error al obtener la ruta actual: %v", err)
 	}
 
-	plantillaOtp, err := template.ParseFiles(ruta + "/plantillas/otp.html") //Se obtiene la plantilla
+	plantillaOtp, err := template.ParseFiles(ruta + "/plantillas/otpcontrasena.html") //Se obtiene la plantilla
 	if err != nil {
 		return fmt.Errorf("error al obtener la plantilla otp: %v", err)
+	}
+
+	if GetDotEnvVar("PRODUCCION") != "true" {
+		otp = fmt.Sprintf("https://predicto.ddns.net/RecuperarContrasena?codigo=%v", otp)
+	} else {
+		otp = fmt.Sprintf("http://localhost:3000/RecuperarContrasena?codigo=%v", otp)
 	}
 
 	plantillaOtp.Execute(&cuerpo, struct { //Se incrusta la información a la plantilla
