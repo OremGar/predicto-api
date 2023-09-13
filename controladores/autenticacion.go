@@ -11,6 +11,7 @@ import (
 	"github.com/OremGar/predicto-api/funciones"
 	"github.com/OremGar/predicto-api/modelos"
 	"github.com/OremGar/predicto-api/respuestas"
+	"github.com/gorilla/mux"
 	"gorm.io/gorm"
 )
 
@@ -174,7 +175,6 @@ func RecuperaContrasena(w http.ResponseWriter, r *http.Request) {
 	respuestas.JsonResponse(w, http.StatusOK, nil, 0, nil)
 }
 
-/*
 func ValidaOTP(w http.ResponseWriter, r *http.Request) {
 	var vars map[string]string = mux.Vars(r)
 	var codigoOTP string = vars["codigo"]
@@ -199,11 +199,14 @@ func ValidaOTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	usuarioOTP = usu
-	if usuarioOTP.FechaCreacion.Add(time.Minute * 5).Before(time.Now().UTC()) {
+	/*
+		usuarioOTP = usu
+		if usuarioOTP.FechaCreacion.Add(time.Minute * 5).Before(time.Now().UTC()) {
 
-	}
-}*/
+		}*/
+
+	respuestas.JsonResponse(w, http.StatusOK, 100, 0, nil)
+}
 
 func Prueba(w http.ResponseWriter, _ *http.Request) {
 	respuestas.JsonResponse(w, http.StatusOK, "Saludos", 0, nil)
