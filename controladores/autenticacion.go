@@ -176,8 +176,6 @@ func RecuperaContrasena(w http.ResponseWriter, r *http.Request) {
 }
 
 func NuevaContrasena(w http.ResponseWriter, r *http.Request) {
-	var correoStr string = r.FormValue("correo")
-	var usuarioStr string = r.FormValue("usuario")
 	var nuevaContrasena string = r.FormValue("nuevaContrasena")
 	var otp string = r.FormValue("otp")
 
@@ -194,11 +192,6 @@ func NuevaContrasena(w http.ResponseWriter, r *http.Request) {
 	usuario, err := modelos.ChecarSiUsuarioExiste(otp_usuario.IdUsuario)
 	if err != nil {
 		respuestas.SetError(w, http.StatusBadRequest, 100, err)
-		return
-	}
-
-	if usuario.Correo != correoStr && usuario.Usuario != usuarioStr {
-		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el usuario o el correo no corresponden"))
 		return
 	}
 
