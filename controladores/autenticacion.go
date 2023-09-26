@@ -80,6 +80,7 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 	var usuario modelos.Usuarios = modelos.Usuarios{}
 	var contrasenaPeticion = r.FormValue("contrasena")
 	var codigoOTP string = ""
+	var usuarioOtp = modelos.UsuariosOtp{}
 
 	usuario.Usuario = r.FormValue("usuario")
 	usuario.Correo = r.FormValue("correo")
@@ -109,6 +110,18 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 	err := funciones.EnviaCorreoOTPLogin(usuario.Correo, codigoOTP)
 	if err != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error al enviar correo: %v", err))
+		return
+	}
+
+	usuarioOtp = modelos.UsuariosOtp{
+		IdUsuario:     usuario.Id,
+		CodigoOtp:     codigoOTP,
+		FechaCreacion: time.Now(),
+	}
+
+	resultado := db.Create(&usuarioOtp)
+	if resultado.Error != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error al guardar otp: %v", err))
 		return
 	}
 
