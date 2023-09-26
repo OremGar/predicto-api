@@ -1,112 +1,0 @@
-Script started on 2023-09-11 00:31:20-05:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="80" LINES="24"]
-]0;pi@raspberrypi: ~/Predicto/predicto-api[01;32mpi@raspberrypi[00m:[01;34m~/Predicto/predicto-api $[00m c[Kcat script.sh 
-#!/bin/bash
-git pull
-go build .
-echo IngGar2213 | sudo -S systemctl restart predictoweb.service
-]0;pi@raspberrypi: ~/Predicto/predicto-api[01;32mpi@raspberrypi[00m:[01;34m~/Predicto/predicto-api $[00m .[Kbash script.sh 
-Ya está actualizado.
-]0;pi@raspberrypi: ~/Predicto/predicto-api[01;32mpi@raspberrypi[00m:[01;34m~/Predicto/predicto-api $[00m clear
-[H[2J[3J]0;pi@raspberrypi: ~/Predicto/predicto-api[01;32mpi@raspberrypi[00m:[01;34m~/Predicto/predicto-api $[00m bash script.sh 
-remote: Enumerating objects: 10, done.[K
-remote: Counting objects:  10% (1/10)[Kremote: Counting objects:  20% (2/10)[Kremote: Counting objects:  30% (3/10)[Kremote: Counting objects:  40% (4/10)[Kremote: Counting objects:  50% (5/10)[Kremote: Counting objects:  60% (6/10)[Kremote: Counting objects:  70% (7/10)[Kremote: Counting objects:  80% (8/10)[Kremote: Counting objects:  90% (9/10)[Kremote: Counting objects: 100% (10/10)[Kremote: Counting objects: 100% (10/10), done.[K
-remote: Compressing objects:  33% (1/3)[Kremote: Compressing objects:  66% (2/3)[Kremote: Compressing objects: 100% (3/3)[Kremote: Compressing objects: 100% (3/3), done.[K
-remote: Total 7 (delta 4), reused 7 (delta 4), pack-reused 0[K
-Desempaquetando objetos:  14% (1/7)   Desempaquetando objetos:  28% (2/7)   Desempaquetando objetos:  42% (3/7)   Desempaquetando objetos:  57% (4/7)   Desempaquetando objetos:  71% (5/7)   Desempaquetando objetos:  85% (6/7)   Desempaquetando objetos: 100% (7/7)   Desempaquetando objetos: 100% (7/7), listo.
-Desde https://github.com/OremGar/predicto-api
-   52510ac..e64a35e  dev        -> origin/dev
-Actualizando 52510ac..e64a35e
-Fast-forward
- funciones/correo.go | 2 [32m+[m[31m-[m
- script.bash         | 4 [32m++++[m
- 2 files changed, 5 insertions(+), 1 deletion(-)
- create mode 100644 script.bash
-]0;pi@raspberrypi: ~/Predicto/predicto-api[01;32mpi@raspberrypi[00m:[01;34m~/Predicto/predicto-api $[00m car ba[K[K[K[Kt basg[Kh[K[K[K[Kscript.
-cat: script.: No existe el fichero o el directorio
-]0;pi@raspberrypi: ~/Predicto/predicto-api[01;32mpi@raspberrypi[00m:[01;34m~/Predicto/predicto-api $[00m cat script.sh [K 
-#!/bin/bash
-git pull
-go build .
-echo IngGar2213 | sudo -S systemctl restart predictoweb.service
-]0;pi@raspberrypi: ~/Predicto/predicto-api[01;32mpi@raspberrypi[00m:[01;34m~/Predicto/predicto-api $[00m ls -l
-total 17072
-drwxr-xr-x 2 pi   pi       4096 sep  6 10:44 [0m[01;34mbd[0m
-drwxr-xr-x 2 pi   pi       4096 sep  7 18:50 [01;34mconfiguraciones[0m
-drwxr-xr-x 2 pi   pi       4096 sep 10 01:02 [01;34mcontroladores[0m
-drwxr-xr-x 2 pi   pi       4096 sep 11 00:34 [01;34mfunciones[0m
--rw-r--r-- 1 pi   pi        615 sep  7 17:55 go.mod
--rw-r--r-- 1 pi   pi       3591 sep  7 17:55 go.sum
-drwxr-xr-x 2 pi   pi       4096 ago 23 14:47 [01;34mllaves[0m
--rw-r--r-- 1 pi   pi       1617 sep 10 00:42 main.go
-drwxr-xr-x 2 pi   pi       4096 ago 29 15:14 [01;34mmiddlewares[0m
-drwxr-xr-x 2 pi   pi       4096 sep 10 01:24 [01;34mmodelos[0m
-drwxr-xr-x 2 pi   pi       4096 sep 10 00:42 [01;34mplantillas[0m
--rwxr-xr-x 1 pi   pi   17416185 sep 11 00:34 [01;32mpredicto-api[0m
--rw-r--r-- 1 pi   pi         74 ago 22 19:07 README.md
-drwxr-xr-x 2 pi   pi       4096 ago 22 19:07 [01;34mrespuestas[0m
--rw-r--r-- 1 pi   pi         56 sep 11 00:34 script.bash
--rw-r--r-- 1 root root       96 sep 11 00:30 script.sh
--rw-r--r-- 1 pi   pi          0 sep 11 00:31 typescript
-]0;pi@raspberrypi: ~/Predicto/predicto-api[01;32mpi@raspberrypi[00m:[01;34m~/Predicto/predicto-api $[00m git [K[K[K[Kbash script.sh 
-remote: Enumerating objects: 3, done.[K
-remote: Counting objects:  33% (1/3)[Kremote: Counting objects:  66% (2/3)[Kremote: Counting objects: 100% (3/3)[Kremote: Counting objects: 100% (3/3), done.[K
-remote: Compressing objects: 100% (1/1)[Kremote: Compressing objects: 100% (1/1), done.[K
-remote: Total 2 (delta 1), reused 2 (delta 1), pack-reused 0[K
-Desempaquetando objetos:  50% (1/2)   Desempaquetando objetos: 100% (2/2)   Desempaquetando objetos: 100% (2/2), listo.
-Desde https://github.com/OremGar/predicto-api
-   e64a35e..7b6e45d  dev        -> origin/dev
-Actualizando e64a35e..7b6e45d
-Fast-forward
- script.bash => git_push.bash | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename script.bash => git_push.bash (100%)
-]0;pi@raspberrypi: ~/Predicto/predicto-api[01;32mpi@raspberrypi[00m:[01;34m~/Predicto/predicto-api $[00m ls -l
-total 17072
-drwxr-xr-x 2 pi   pi       4096 sep  6 10:44 [0m[01;34mbd[0m
-drwxr-xr-x 2 pi   pi       4096 sep  7 18:50 [01;34mconfiguraciones[0m
-drwxr-xr-x 2 pi   pi       4096 sep 10 01:02 [01;34mcontroladores[0m
-drwxr-xr-x 2 pi   pi       4096 sep 11 00:34 [01;34mfunciones[0m
--rw-r--r-- 1 pi   pi         56 sep 11 00:36 git_push.bash
--rw-r--r-- 1 pi   pi        615 sep  7 17:55 go.mod
--rw-r--r-- 1 pi   pi       3591 sep  7 17:55 go.sum
-drwxr-xr-x 2 pi   pi       4096 ago 23 14:47 [01;34mllaves[0m
--rw-r--r-- 1 pi   pi       1617 sep 10 00:42 main.go
-drwxr-xr-x 2 pi   pi       4096 ago 29 15:14 [01;34mmiddlewares[0m
-drwxr-xr-x 2 pi   pi       4096 sep 10 01:24 [01;34mmodelos[0m
-drwxr-xr-x 2 pi   pi       4096 sep 10 00:42 [01;34mplantillas[0m
--rwxr-xr-x 1 pi   pi   17416185 sep 11 00:36 [01;32mpredicto-api[0m
--rw-r--r-- 1 pi   pi         74 ago 22 19:07 README.md
-drwxr-xr-x 2 pi   pi       4096 ago 22 19:07 [01;34mrespuestas[0m
--rw-r--r-- 1 root root       96 sep 11 00:30 script.sh
--rw-r--r-- 1 pi   pi       4096 sep 11 00:36 typescript
-]0;pi@raspberrypi: ~/Predicto/predicto-api[01;32mpi@raspberrypi[00m:[01;34m~/Predicto/predicto-api $[00m mv script.sh pull[K[K[K[Kgit_pull.sh
-]0;pi@raspberrypi: ~/Predicto/predicto-api[01;32mpi@raspberrypi[00m:[01;34m~/Predicto/predicto-api $[00m ls -l
-total 17076
-drwxr-xr-x 2 pi   pi       4096 sep  6 10:44 [0m[01;34mbd[0m
-drwxr-xr-x 2 pi   pi       4096 sep  7 18:50 [01;34mconfiguraciones[0m
-drwxr-xr-x 2 pi   pi       4096 sep 10 01:02 [01;34mcontroladores[0m
-drwxr-xr-x 2 pi   pi       4096 sep 11 00:34 [01;34mfunciones[0m
--rw-r--r-- 1 root root       96 sep 11 00:30 git_pull.sh
--rw-r--r-- 1 pi   pi         56 sep 11 00:36 git_push.bash
--rw-r--r-- 1 pi   pi        615 sep  7 17:55 go.mod
--rw-r--r-- 1 pi   pi       3591 sep  7 17:55 go.sum
-drwxr-xr-x 2 pi   pi       4096 ago 23 14:47 [01;34mllaves[0m
--rw-r--r-- 1 pi   pi       1617 sep 10 00:42 main.go
-drwxr-xr-x 2 pi   pi       4096 ago 29 15:14 [01;34mmiddlewares[0m
-drwxr-xr-x 2 pi   pi       4096 sep 10 01:24 [01;34mmodelos[0m
-drwxr-xr-x 2 pi   pi       4096 sep 10 00:42 [01;34mplantillas[0m
--rwxr-xr-x 1 pi   pi   17416185 sep 11 00:36 [01;32mpredicto-api[0m
--rw-r--r-- 1 pi   pi         74 ago 22 19:07 README.md
-drwxr-xr-x 2 pi   pi       4096 ago 22 19:07 [01;34mrespuestas[0m
--rw-r--r-- 1 pi   pi       4096 sep 11 00:36 typescript
-]0;pi@raspberrypi: ~/Predicto/predicto-api[01;32mpi@raspberrypi[00m:[01;34m~/Predicto/predicto-api $[00m ls -lmv script.sh git_pull.sh[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kgt[Kit p[K[K[Kt_pull.sh git_pull.bash
-]0;pi@raspberrypi: ~/Predicto/predicto-api[01;32mpi@raspberrypi[00m:[01;34m~/Predicto/predicto-api $[00m ls -l
-total 17076
-drwxr-xr-x 2 pi   pi       4096 sep  6 10:44 [0m[01;34mbd[0m
-drwxr-xr-x 2 pi   pi       4096 sep  7 18:50 [01;34mconfiguraciones[0m
-drwxr-xr-x 2 pi   pi       4096 sep 10 01:02 [01;34mcontroladores[0m
-drwxr-xr-x 2 pi   pi       4096 sep 11 00:34 [01;34mfunciones[0m
--rw-r--r-- 1 root root       96 sep 11 00:30 git_pull.bash
--rw-r--r-- 1 pi   pi         56 sep 11 00:36 git_push.bash
--rw-r--r-- 1 pi   pi        615 sep  7 17:55 go.mod
--rw-r--r-- 1 pi   pi       3591 sep  7 17:55 go

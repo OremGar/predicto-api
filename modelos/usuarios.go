@@ -58,6 +58,29 @@ func ChecarSiUsuarioExiste(id int) (Usuarios, error) {
 	return usuario, nil
 }
 
+func ChecarSiOTPValido(codigoOtp string) (bool, UsuariosOtp, error) {
+	var otp UsuariosOtp = UsuariosOtp{}
+
+	var db *gorm.DB = bd.ConnectDB()
+	sqldb, _ := db.DB()
+	defer sqldb.Close()
+
+	result := db.Model(&UsuariosOtp{}).Where("codigo_otp = ?", otp).First(&otp)
+	if result.Error != nil {
+		if result.Error == gorm.ErrRecordNotFound {
+			return false, UsuariosOtp{}, fmt.Errorf("el código otp no existe")
+		} else {
+			return false, UsuariosOtp{}, result.Error
+		}
+	}
+
+	if otp.FechaCreacion.Add(time.Hour * 3).Before(time.Now()) {
+		return false, UsuariosOtp{}, fmt.Errorf("el codigo otp ya expiró")
+	}
+
+	return true, otp, nil
+}
+
 // Función para validar que el objeto usuario no le falte nada
 func ValidarInfoUsuarios(usuario *Usuarios) error {
 	if usuario.Nombre == "" {

@@ -163,7 +163,7 @@ func RecuperaContrasena(w http.ResponseWriter, r *http.Request) {
 	usuarioOtp = modelos.UsuariosOtp{
 		IdUsuario:     usuario.Id,
 		CodigoOtp:     otp,
-		FechaCreacion: db.NowFunc(),
+		FechaCreacion: time.Now(),
 	}
 
 	resultado = db.Create(&usuarioOtp)
@@ -173,6 +173,48 @@ func RecuperaContrasena(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respuestas.JsonResponse(w, http.StatusOK, nil, 0, nil)
+}
+
+func NuevaContrasena(w http.ResponseWriter, r *http.Request) {
+	var correoStr string = r.FormValue("correo")
+	var usuarioStr string = r.FormValue("usuario")
+	var nuevaContrasena string = r.FormValue("nuevaContrasena")
+	var otp string = r.FormValue("otp")
+
+	var db *gorm.DB = bd.ConnectDB()
+	sqldb, _ := db.DB()
+	defer sqldb.Close()
+
+	_, otp_usuario, err := modelos.ChecarSiOTPValido(otp)
+	if err != nil {
+		respuestas.SetError(w, http.StatusBadRequest, 100, err)
+		return
+	}
+
+	usuario, err := modelos.ChecarSiUsuarioExiste(otp_usuario.IdUsuario)
+	if err != nil {
+		respuestas.SetError(w, http.StatusBadRequest, 100, err)
+		return
+	}
+
+	if usuario.Correo != correoStr && usuario.Usuario != usuarioStr {
+		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el usuario o el correo no corresponden"))
+		return
+	}
+
+	usuario.Contrasena, err = funciones.HashContrasena(nuevaContrasena)
+	if err != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, err)
+		return
+	}
+
+	result := db.Save(&usuario)
+	if result.Error != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error interno sql: %v", result.Error))
+		return
+	}
+
+	respuestas.JsonResponse(w, http.StatusOK, usuario, 0, nil)
 }
 
 func ValidaOTP(w http.ResponseWriter, r *http.Request) {
