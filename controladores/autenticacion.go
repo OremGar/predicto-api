@@ -210,7 +210,7 @@ func NuevaContrasena(w http.ResponseWriter, r *http.Request) {
 	respuestas.JsonResponse(w, http.StatusOK, usuario, 0, nil)
 }
 
-func ValidaOTP(w http.ResponseWriter, r *http.Request) {
+func ValidaOTPNvaContrasena(w http.ResponseWriter, r *http.Request) {
 	var vars map[string]string = mux.Vars(r)
 	var codigoOTP string = vars["codigo"]
 	var usuarioOTP modelos.UsuariosOtp = modelos.UsuariosOtp{}
