@@ -26,6 +26,7 @@ func Router() (http.Handler, *cors.Cors) {
 	r.HandleFunc("/api/v1/cuenta/RecuperaContrasena", controladores.RecuperaContrasena).Methods(http.MethodPost)
 	r.HandleFunc("/api/v1/cuenta/NuevaContrasena", controladores.NuevaContrasena).Methods(http.MethodPut)
 	r.HandleFunc("/api/v1/cuenta/ValidaOTPContrasena/{codigo:[0-9]+}", controladores.ValidaOTPNvaContrasena).Methods(http.MethodGet)
+	r.HandleFunc("/api/v1/cuenta/ValidaOTPLogin", controladores.ValidaOtpLogin).Methods(http.MethodPost)
 	r.HandleFunc("/api/v1/prueba/saludo", controladores.Prueba).Methods(http.MethodGet)
 
 	wrappedMux = middlewares.ValidarToken(r.ServeHTTP)
