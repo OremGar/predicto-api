@@ -234,12 +234,6 @@ func ValidaOTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	/*
-		usuarioOTP = usu
-		if usuarioOTP.FechaCreacion.Add(time.Minute * 5).Before(time.Now().UTC()) {
-
-		}*/
-
 	respuestas.JsonResponse(w, http.StatusOK, 100, 0, nil)
 }
 
