@@ -65,7 +65,7 @@ func ChecarSiOTPValido(codigoOtp string) (bool, UsuariosOtp, error) {
 	sqldb, _ := db.DB()
 	defer sqldb.Close()
 
-	result := db.Model(&UsuariosOtp{}).Where("codigo_otp = ?", otp).First(&otp)
+	result := db.Model(&otp).Where("codigo_otp = ?", codigoOtp).First(&otp)
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
 			return false, UsuariosOtp{}, fmt.Errorf("el código otp no existe")
