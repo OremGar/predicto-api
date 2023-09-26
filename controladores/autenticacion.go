@@ -79,7 +79,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 func SignIn(w http.ResponseWriter, r *http.Request) {
 	var usuario modelos.Usuarios = modelos.Usuarios{}
 	var contrasenaPeticion = r.FormValue("contrasena")
-	var registroJWT modelos.UsuariosJwt = modelos.UsuariosJwt{}
+	var codigoOTP string = ""
 
 	usuario.Usuario = r.FormValue("usuario")
 	usuario.Correo = r.FormValue("correo")
@@ -104,6 +104,56 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	codigoOTP = funciones.GeneraOTP(6)
+
+	err := funciones.EnviaCorreoOTPLogin(usuario.Correo, codigoOTP)
+	if err != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error al enviar correo: %v", err))
+		return
+	}
+
+	/*
+		token, err := configuraciones.GenerarJWT(usuario.Id)
+		if err != nil {
+			respuestas.SetError(w, http.StatusInternalServerError, 100, err)
+			return
+		}
+
+		registroJWT = modelos.UsuariosJwt{
+			IdUsuario:   usuario.Id,
+			Token:       token,
+			FechaInicio: time.Now(),
+		}
+
+		result = db.Create(&registroJWT)
+		if result.Error != nil {
+			fmt.Println(result.Error)
+		}
+
+		r.Header.Set("Authentication", token)
+	*/
+
+	respuestas.JsonResponse(w, http.StatusOK, nil, 0, nil)
+}
+
+func ValidaOtpLogin(w http.ResponseWriter, r *http.Request) {
+	var codigoOTP string = r.FormValue("codigoOtp")
+	var registroJWT modelos.UsuariosJwt = modelos.UsuariosJwt{}
+
+	var db *gorm.DB = bd.ConnectDB()
+	sqldb, _ := db.DB()
+	defer sqldb.Close()
+
+	_, usuarioOtp, err := modelos.ChecarSiOTPValido(codigoOTP)
+	if err != nil {
+		respuestas.SetError(w, http.StatusBadRequest, 100, err)
+	}
+
+	usuario, err := modelos.ChecarSiUsuarioExiste(usuarioOtp.IdUsuario)
+	if err != nil {
+		respuestas.SetError(w, http.StatusBadRequest, 100, err)
+	}
+
 	token, err := configuraciones.GenerarJWT(usuario.Id)
 	if err != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, err)
@@ -116,14 +166,12 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		FechaInicio: time.Now(),
 	}
 
-	result = db.Create(&registroJWT)
+	result := db.Create(&registroJWT)
 	if result.Error != nil {
 		fmt.Println(result.Error)
 	}
 
 	r.Header.Set("Authentication", token)
-
-	fmt.Println(token)
 
 	respuestas.JsonResponse(w, http.StatusOK, registroJWT, 0, nil)
 }
