@@ -37,6 +37,7 @@ func Router() (http.Handler, *cors.Cors) {
 			"http://predicto.ddns.net:8081",
 			"https://predicto.ddns.net:8080",
 			"https://predicto.ddns.net:8081",
+			"http://192.168.1.25:8080",
 			"http://localhost:3000",
 			"*",
 		},

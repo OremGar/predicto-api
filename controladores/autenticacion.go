@@ -125,27 +125,6 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	/*
-		token, err := configuraciones.GenerarJWT(usuario.Id)
-		if err != nil {
-			respuestas.SetError(w, http.StatusInternalServerError, 100, err)
-			return
-		}
-
-		registroJWT = modelos.UsuariosJwt{
-			IdUsuario:   usuario.Id,
-			Token:       token,
-			FechaInicio: time.Now(),
-		}
-
-		result = db.Create(&registroJWT)
-		if result.Error != nil {
-			fmt.Println(result.Error)
-		}
-
-		r.Header.Set("Authentication", token)
-	*/
-
 	respuestas.JsonResponse(w, http.StatusOK, nil, 0, nil)
 }
 
