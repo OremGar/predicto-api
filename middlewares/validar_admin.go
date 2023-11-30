@@ -12,31 +12,30 @@ import (
 	"gorm.io/gorm"
 )
 
-// Middleware para válidar usuarios y tokens
-func ValidarToken(peticion http.HandlerFunc) http.Handler {
+func ValidarAdmin(peticion http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var token string = r.Header.Get("Authorization") //Se obtiene el token del encabezado
-		var usuario modelos.Usuarios                     //Objeto usuario
-		var existe bool                                  //Booleano para válidar existencia
+		var token string = r.Header.Get("Authorization")
+		var usuario modelos.Usuarios
+		var existe bool
 
-		var db *gorm.DB = bd.ConnectDB() //Objeto para conexión y operaciones a la BD
+		var db *gorm.DB = bd.ConnectDB()
 		sqldb, _ := db.DB()
 		defer sqldb.Close()
 
-		if strings.HasPrefix(r.URL.Path, "/api/v1/cuenta") { //Si el endpoint a consultar tiene la ruta /api/v1/cuenta, no es necesario hacer el resto de validaciones
+		if !strings.HasPrefix(r.URL.Path, "/admin") {
 			peticion.ServeHTTP(w, r)
 			return
 		}
 
-		_, claims, err := configuraciones.ValidarJWT(token) //Se válida el JWT
+		_, claims, err := configuraciones.ValidarJWT(token)
 		if err != nil {
-			respuestas.SetError(w, http.StatusUnauthorized, 100, err)
+			respuestas.SetError(w, http.StatusUnauthorized, 100, fmt.Errorf("token is not valid"))
 			return
 		}
 
-		usuario.Id = claims.IdUsuario //Se obtiene el id del usuario de los claims del JWT
+		usuario.Id = claims.IdUsuario
 
-		result := db.First(&usuario) //Se busca el usuario por su ID
+		result := db.First(&usuario)
 		if result.Error != nil {
 			if result.Error == gorm.ErrRecordNotFound {
 				respuestas.SetError(w, http.StatusUnauthorized, 100, fmt.Errorf("el usuario no existe")) //Si no existe usuario, se retorna un error
@@ -64,6 +63,11 @@ func ValidarToken(peticion http.HandlerFunc) http.Handler {
 		}
 		if existe {
 			respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("token no válido, existen tokens más nuevos"))
+			return
+		}
+
+		if usuario.Usuario != modelos.TIPO_USUARIO_ADMIN {
+			respuestas.SetError(w, http.StatusUnauthorized, 100, fmt.Errorf("el usuario no está autorizado para acceder a este recurso"))
 			return
 		}
 

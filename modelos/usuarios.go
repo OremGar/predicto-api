@@ -8,6 +8,12 @@ import (
 	"gorm.io/gorm"
 )
 
+const (
+	TIPO_USUARIO_ADMIN                 string = "administrador"
+	TIPO_USUARIO_USUARIO               string = "usuario"
+	TIPO_USUARIO_USUARIO_ADMINISTRADOR string = "usuario_administrador"
+)
+
 // Modelos
 type Usuarios struct {
 	Id         int    `json:"id"`
@@ -17,6 +23,7 @@ type Usuarios struct {
 	Correo     string `json:"correo"`
 	Contrasena string `json:"contrasena"`
 	Telefono   string `json:"telefono"`
+	IdEmpresa  int    `json:"id_empresa"`
 }
 
 type UsuariosJwt struct {

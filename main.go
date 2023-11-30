@@ -30,6 +30,7 @@ func Router() (http.Handler, *cors.Cors) {
 	r.HandleFunc("/api/v1/prueba/saludo", controladores.Prueba).Methods(http.MethodGet)
 
 	wrappedMux = middlewares.ValidarToken(r.ServeHTTP)
+	wrappedMux = middlewares.ValidarAdmin(wrappedMux)
 
 	corsOpc = cors.New(cors.Options{
 		AllowedOrigins: []string{
