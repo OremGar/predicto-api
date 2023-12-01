@@ -22,7 +22,8 @@ func ValidarAdmin(peticion http.Handler) http.Handler {
 		sqldb, _ := db.DB()
 		defer sqldb.Close()
 
-		if !strings.HasPrefix(r.URL.Path, "/admin") {
+		fmt.Println(r.URL.Path)
+		if !strings.HasPrefix(r.URL.Path, "/api/v1/cuenta/admin") {
 			peticion.ServeHTTP(w, r)
 			return
 		}
