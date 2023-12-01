@@ -47,9 +47,9 @@ func CambiarNombreAnalicto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result = db.Raw("UPDATE analictos SET nombre = ? WHERE id = ?", nuevoNombre, id)
+	result = db.Exec("UPDATE analictos SET nombre = ? WHERE id = ?", nuevoNombre, id)
 	if result.Error != nil {
-		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el analicto no existe"))
+		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("error interno: %v", result.Error))
 		return
 	}
 
