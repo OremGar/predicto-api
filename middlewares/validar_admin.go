@@ -67,6 +67,8 @@ func ValidarAdmin(peticion http.Handler) http.Handler {
 			return
 		}
 
+		fmt.Println(usuario)
+
 		if usuario.Usuario != modelos.TIPO_USUARIO_ADMIN {
 			respuestas.SetError(w, http.StatusUnauthorized, 100, fmt.Errorf("el usuario no está autorizado para acceder a este recurso"))
 			return
