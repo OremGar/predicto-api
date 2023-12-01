@@ -32,11 +32,15 @@ func CambiarNombreAnalicto(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println(nuevoNombre)
+
 	result := db.Raw("SELECT COUNT(*)>0 FROM analictos WHERE id = ?", id).Scan(&existe)
 	if result.Error != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("internal error: %v", result.Error))
 		return
 	}
+
+	fmt.Println(existe)
 
 	if !existe {
 		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el analicto no existe"))
@@ -48,6 +52,8 @@ func CambiarNombreAnalicto(w http.ResponseWriter, r *http.Request) {
 		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el analicto no existe"))
 		return
 	}
+
+	fmt.Println(result.RowsAffected)
 
 	respuestas.JsonResponse(w, http.StatusOK, nil, 0, nil)
 }
