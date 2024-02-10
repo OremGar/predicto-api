@@ -16,14 +16,13 @@ const (
 
 // Modelos
 type Usuarios struct {
-	Id          int    `json:"id"`
-	Nombre      string `json:"nombre"`
-	Apellidos   string `json:"apellidos"`
-	Usuario     string `json:"usuario"`
-	Correo      string `json:"correo"`
-	Contrasena  string `json:"contrasena"`
-	Telefono    string `json:"telefono"`
-	TipoUsuario string `json:"tipo_usuario"`
+	Id         int    `json:"id"`
+	Nombre     string `json:"nombre"`
+	Apellidos  string `json:"apellidos"`
+	Usuario    string `json:"usuario"`
+	Correo     string `json:"correo"`
+	Contrasena string `json:"contrasena"`
+	Telefono   string `json:"telefono"`
 }
 
 type UsuariosJwt struct {
