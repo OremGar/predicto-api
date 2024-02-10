@@ -23,7 +23,6 @@ type Usuarios struct {
 	Correo      string `json:"correo"`
 	Contrasena  string `json:"contrasena"`
 	Telefono    string `json:"telefono"`
-	IdEmpresa   int    `json:"id_empresa"`
 	TipoUsuario string `json:"tipo_usuario"`
 }
 

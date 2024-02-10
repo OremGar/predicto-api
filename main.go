@@ -29,7 +29,6 @@ func Router() (http.Handler, *cors.Cors) {
 	r.HandleFunc("/api/v1/cuenta/ValidaOTPLogin", controladores.ValidaOtpLogin).Methods(http.MethodPost)
 
 	//Administrador
-	r.HandleFunc("/api/v1/cuenta/admin/CambiarNombreAnalicto", controladores.CambiarNombreAnalicto).Methods(http.MethodPut)
 
 	r.HandleFunc("/api/v1/prueba/saludo", controladores.Prueba).Methods(http.MethodGet)
 
