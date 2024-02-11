@@ -22,7 +22,7 @@ var (
 	SERVIDOR  = GetDotEnvVar("SERVIDOR_SMPT")
 	PUERTO    = GetDotEnvVar("PUERTO_CORREO")
 
-	ASUNTO = "Código de verificación 1"
+	ASUNTO = "CÓDIGO PREDICTO"
 )
 
 func EnviaCorreoOTPContrasena(destino string, otp string) error {
