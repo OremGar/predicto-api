@@ -2,10 +2,13 @@ package funciones
 
 import (
 	"bytes"
+	"crypto/tls"
 	"fmt"
 	"html/template"
-	"net/smtp"
 	"os"
+	"strconv"
+
+	gomail "gopkg.in/mail.v2"
 )
 
 type Correo struct {
@@ -17,19 +20,19 @@ type Correo struct {
 }
 
 var (
-	CORREO    = GetDotEnvVar("CORREO")
-	COTRASENA = GetDotEnvVar("CONTRASENA_CORREO")
-	SERVIDOR  = GetDotEnvVar("SERVIDOR_SMPT")
-	PUERTO    = GetDotEnvVar("PUERTO_CORREO")
+	CORREO     = GetDotEnvVar("CORREO")
+	CONTRASENA = GetDotEnvVar("CONTRASENA_CORREO")
+	SERVIDOR   = GetDotEnvVar("SERVIDOR_SMPT")
+	PUERTO     = GetDotEnvVar("PUERTO_CORREO")
 
 	ASUNTO = "PREDICTO"
 )
 
 func EnviaCorreoOTPContrasena(destino string, otp string) error {
-	var credenciales smtp.Auth = AuthCorreo() //Se obtienen las credenciales para enviar el correo
+	var m *gomail.Message = gomail.NewMessage()
+	var d *gomail.Dialer = &gomail.Dialer{}
 	var cuerpo bytes.Buffer = bytes.Buffer{}
-	var peticion Correo = Correo{}
-	var contenido string
+	var puerto int
 
 	ruta, err := os.Getwd() //Se obtiene la ruta de la carpeta del proyecto para obtener la plantilla
 	if err != nil {
@@ -53,7 +56,35 @@ func EnviaCorreoOTPContrasena(destino string, otp string) error {
 		Otp: otp,
 	})
 
-	peticion = Correo{
+	// Set E-Mail sender
+	m.SetHeader("From", CORREO)
+
+	// Set E-Mail receivers
+	m.SetHeader("To", destino)
+
+	// Set E-Mail subject
+	m.SetHeader("Subject", "Recuperar contraseña")
+
+	// Set E-Mail body. You can set plain text or html with text/html
+	m.SetBody("text/html", cuerpo.String())
+
+	puerto, err = strconv.Atoi(PUERTO)
+	if err != nil {
+		return fmt.Errorf("error al enviar correo para el código otp: %v", err)
+	}
+	d = gomail.NewDialer(SERVIDOR, puerto, CORREO, CONTRASENA)
+
+	// This is only needed when SSL/TLS certificate is not valid on server.
+	// In production this should be set to false.
+	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
+
+	// Now send E-Mail
+	if err := d.DialAndSend(m); err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+
+	/*peticion = Correo{
 		Origen:  CORREO,
 		Destino: destino,
 		Asunto:  ASUNTO,
@@ -66,16 +97,17 @@ func EnviaCorreoOTPContrasena(destino string, otp string) error {
 	err = smtp.SendMail(fmt.Sprintf("%v:%v", SERVIDOR, PUERTO), credenciales, CORREO, []string{peticion.Destino}, []byte(contenido))
 	if err != nil {
 		return fmt.Errorf("error al enviar correo para el código otp: %v", err)
-	}
+	}*/
 
 	return nil
 }
 
 func EnviaCorreoOTPLogin(destino string, otp string) error {
-	var credenciales smtp.Auth = AuthCorreo() //Se obtienen las credenciales para enviar el correo
+	var m *gomail.Message = gomail.NewMessage()
+	var d *gomail.Dialer = &gomail.Dialer{}
 	var cuerpo bytes.Buffer = bytes.Buffer{}
-	var peticion Correo = Correo{}
-	var contenido string
+	var puerto int
+	var err error
 
 	ruta, err := os.Getwd() //Se obtiene la ruta de la carpeta del proyecto para obtener la plantilla
 	if err != nil {
@@ -93,28 +125,57 @@ func EnviaCorreoOTPLogin(destino string, otp string) error {
 		Otp: otp,
 	})
 
-	peticion = Correo{
-		Origen:  CORREO,
-		Destino: destino,
-		Asunto:  ASUNTO,
-		Cuerpo:  cuerpo,
-		Mime:    "1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n",
-	}
+	// Set E-Mail sender
+	m.SetHeader("From", CORREO)
 
-	contenido = ConstruyeCorreo(peticion)
+	// Set E-Mail receivers
+	m.SetHeader("To", destino)
 
-	err = smtp.SendMail(fmt.Sprintf("%v:%v", SERVIDOR, PUERTO), credenciales, CORREO, []string{peticion.Destino}, []byte(contenido))
+	// Set E-Mail subject
+	m.SetHeader("Subject", "Recuperar contraseña")
+
+	// Set E-Mail body. You can set plain text or html with text/html
+	m.SetBody("text/html", cuerpo.String())
+
+	puerto, err = strconv.Atoi(PUERTO)
 	if err != nil {
 		return fmt.Errorf("error al enviar correo para el código otp: %v", err)
 	}
+	d = gomail.NewDialer(SERVIDOR, puerto, CORREO, CONTRASENA)
+
+	// This is only needed when SSL/TLS certificate is not valid on server.
+	// In production this should be set to false.
+	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
+
+	// Now send E-Mail
+	if err := d.DialAndSend(m); err != nil {
+		return fmt.Errorf("error al enviar correo para el código otp: %v", err)
+	}
+
+	/*
+		peticion = Correo{
+			Origen:  CORREO,
+			Destino: destino,
+			Asunto:  ASUNTO,
+			Cuerpo:  cuerpo,
+			Mime:    "1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n",
+		}
+
+		contenido = ConstruyeCorreo(peticion)
+
+		err = smtp.SendMail(fmt.Sprintf("%v:%v", SERVIDOR, PUERTO), credenciales, CORREO, []string{peticion.Destino}, []byte(contenido))
+		if err != nil {
+			return fmt.Errorf("error al enviar correo para el código otp: %v", err)
+		}*/
 
 	return nil
 }
 
 // Función para obtener las credenciales del servidor SMTP
+/*
 func AuthCorreo() smtp.Auth {
 	return smtp.PlainAuth("", CORREO, COTRASENA, SERVIDOR)
-}
+}*/
 
 // Función para construir la estructura de un correo
 func ConstruyeCorreo(correo Correo) string {
