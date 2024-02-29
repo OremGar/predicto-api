@@ -120,8 +120,6 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(r.Header.Get("User-Agent"))
-
 	//Si el dispositivo es móvil, retorna el JWT, de lo contrario, se enviará un código OTP
 	if detect.IsMobile() || detect.IsTablet() {
 		token, err := configuraciones.GenerarJWT(usuario.Id)
