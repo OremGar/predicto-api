@@ -42,9 +42,9 @@ func EnviaCorreoOTPContrasena(destino string, otp string) error {
 	}
 
 	if GetDotEnvVar("PRODUCCION") == "true" {
-		otp = fmt.Sprintf("https://predicto.ddns.net/RecuperarContrasena?codigo=%v", otp)
+		otp = fmt.Sprintf("https://predicto.ddns.net/RecuperacionContrasena?codigo=%v", otp)
 	} else {
-		otp = fmt.Sprintf("http://localhost:3000/RecuperarContrasena?codigo=%v", otp)
+		otp = fmt.Sprintf("http://localhost:3000/RecuperacionContrasena?codigo=%v", otp)
 	}
 
 	plantillaOtp.Execute(&cuerpo, struct { //Se incrusta la información a la plantilla
