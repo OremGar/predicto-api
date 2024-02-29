@@ -11,6 +11,7 @@ import (
 	"github.com/OremGar/predicto-api/funciones"
 	"github.com/OremGar/predicto-api/modelos"
 	"github.com/OremGar/predicto-api/respuestas"
+	mobiledetect "github.com/Shaked/gomobiledetect"
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
 )
@@ -20,10 +21,12 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	var usuario modelos.Usuarios = modelos.Usuarios{}
 	var existe bool
 
+	//Objeto conector de base de datos
 	var db *gorm.DB = bd.ConnectDB()
 	sqldb, _ := db.DB()
 	defer sqldb.Close()
 
+	//Se obtienen y validan los campos
 	usuario.Nombre = r.FormValue("nombre")
 	usuario.Apellidos = r.FormValue("apellidos")
 	usuario.Correo = r.FormValue("correo")
@@ -47,6 +50,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//Se verifica que no exista el usuario ingresado
 	result := db.Model(&usuario).Select("count(*) > 0").Where("usuario = ?", usuario.Usuario).Find(&existe)
 	if result.Error != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
@@ -57,6 +61,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//Se verifica que no exista el correo ingresado
 	result = db.Model(&usuario).Select("count(*) > 0").Where("correo = ?", usuario.Correo).Find(&existe)
 	if result.Error != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
@@ -67,6 +72,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//Se guarda al usuario
 	result = db.Save(&usuario).First(&usuario)
 	if result.Error != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
@@ -76,19 +82,25 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	respuestas.JsonResponse(w, http.StatusCreated, usuario.Id, 0, nil)
 }
 
+// Endpoint para LogIn de usuarios
 func SignIn(w http.ResponseWriter, r *http.Request) {
 	var usuario modelos.Usuarios = modelos.Usuarios{}
 	var contrasenaPeticion = r.FormValue("contrasena")
 	var codigoOTP string = ""
 	var usuarioOtp = modelos.UsuariosOtp{}
+	var registroJWT modelos.UsuariosJwt = modelos.UsuariosJwt{}
+
+	var detect *mobiledetect.MobileDetect = mobiledetect.NewMobileDetect(r, nil) //Objeto que evalua si la petición es realizada por un dispositivo móvil
 
 	usuario.Usuario = r.FormValue("usuario")
 	usuario.Correo = r.FormValue("correo")
 
+	//Objeto conector de BD
 	var db *gorm.DB = bd.ConnectDB()
 	sqldb, _ := db.DB()
 	defer sqldb.Close()
 
+	//Se busca el correo
 	result := db.Model(&usuario).Where("usuario = ? OR correo = ?", usuario.Usuario, usuario.Correo).First(&usuario)
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
@@ -99,20 +111,49 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//Se válida la contraseña
 	validado := funciones.ValidaContrasena(contrasenaPeticion, usuario.Contrasena)
 	if !validado {
 		respuestas.SetError(w, http.StatusNotFound, 100, fmt.Errorf("contraseña incorrecta"))
 		return
 	}
 
+	//Si el dispositivo es móvil, retorna el JWT, de lo contrario, se enviará un código OTP
+	if detect.IsMobile() || detect.IsTablet() {
+		token, err := configuraciones.GenerarJWT(usuario.Id)
+		if err != nil {
+			respuestas.SetError(w, http.StatusInternalServerError, 100, err)
+			return
+		}
+
+		registroJWT = modelos.UsuariosJwt{
+			IdUsuario:   usuario.Id,
+			Token:       token,
+			FechaInicio: time.Now(),
+		}
+
+		result := db.Create(&registroJWT)
+		if result.Error != nil {
+			fmt.Println(result.Error)
+		}
+
+		r.Header.Set("Authentication", token)
+
+		respuestas.JsonResponse(w, http.StatusOK, registroJWT, 0, nil)
+		return
+	}
+
+	//Generación de código OTP
 	codigoOTP = funciones.GeneraOTP(6)
 
+	//Envío de OTP por correo
 	err := funciones.EnviaCorreoOTPLogin(usuario.Correo, codigoOTP)
 	if err != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error al enviar correo: %v", err))
 		return
 	}
 
+	//Creación de código OTP
 	usuarioOtp = modelos.UsuariosOtp{
 		IdUsuario:     usuario.Id,
 		CodigoOtp:     codigoOTP,
