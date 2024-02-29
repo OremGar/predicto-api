@@ -132,7 +132,7 @@ func EnviaCorreoOTPLogin(destino string, otp string) error {
 	m.SetHeader("To", destino)
 
 	// Set E-Mail subject
-	m.SetHeader("Subject", "Recuperar contraseña")
+	m.SetHeader("Subject", "Doble auntenticación")
 
 	// Set E-Mail body. You can set plain text or html with text/html
 	m.SetBody("text/html", cuerpo.String())
