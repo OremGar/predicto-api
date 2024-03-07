@@ -95,8 +95,6 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 	usuario.Usuario = r.FormValue("usuario")
 	usuario.Correo = r.FormValue("correo")
 
-	fmt.Println(usuario)
-
 	//Objeto conector de BD
 	var db *gorm.DB = bd.ConnectDB()
 	sqldb, _ := db.DB()
