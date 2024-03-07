@@ -49,7 +49,7 @@ func GenerarJWT(idUsuario int) (string, error) {
 	var claims *modelos.Claims = &modelos.Claims{
 		IdUsuario: idUsuario,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(43200 * time.Hour)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(6 * time.Hour)),
 		},
 	}
 
