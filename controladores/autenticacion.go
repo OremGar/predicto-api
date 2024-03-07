@@ -187,6 +187,7 @@ func ValidaOtpLogin(w http.ResponseWriter, r *http.Request) {
 	usuario, err := modelos.ChecarSiUsuarioExiste(usuarioOtp.IdUsuario)
 	if err != nil {
 		respuestas.SetError(w, http.StatusBadRequest, 100, err)
+		return
 	}
 
 	token, err := configuraciones.GenerarJWT(usuario.Id)
