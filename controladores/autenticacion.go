@@ -32,7 +32,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	usuario.Correo = r.FormValue("correo")
 	_, err := mail.ParseAddress(usuario.Correo)
 	if err != nil {
-		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el correo no está en el formato correcto"))
+		respuestas.SetError(w, http.StatusBadRequest, 104, fmt.Errorf("el correo no está en el formato correcto"))
 		return
 	}
 	usuario.Usuario = r.FormValue("usuario")
@@ -46,7 +46,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 
 	err = modelos.ValidarInfoUsuarios(&usuario)
 	if err != nil {
-		respuestas.SetError(w, http.StatusBadRequest, 100, err)
+		respuestas.SetError(w, http.StatusBadRequest, 101, err)
 		return
 	}
 
@@ -57,7 +57,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if existe {
-		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el usuario '%v' ya existe", usuario.Usuario))
+		respuestas.SetError(w, http.StatusBadRequest, 102, fmt.Errorf("el usuario '%v' ya existe", usuario.Usuario))
 		return
 	}
 
@@ -68,7 +68,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if existe {
-		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el correo '%v' ya existe", usuario.Correo))
+		respuestas.SetError(w, http.StatusBadRequest, 103, fmt.Errorf("el correo '%v' ya existe", usuario.Correo))
 		return
 	}
 
