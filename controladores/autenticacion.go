@@ -182,6 +182,7 @@ func ValidaOtpLogin(w http.ResponseWriter, r *http.Request) {
 	_, usuarioOtp, err := modelos.ChecarSiOTPValido(codigoOTP)
 	if err != nil {
 		respuestas.SetError(w, http.StatusBadRequest, 100, err)
+		return
 	}
 
 	usuario, err := modelos.ChecarSiUsuarioExiste(usuarioOtp.IdUsuario)
@@ -204,7 +205,8 @@ func ValidaOtpLogin(w http.ResponseWriter, r *http.Request) {
 
 	result := db.Create(&registroJWT)
 	if result.Error != nil {
-		fmt.Println(result.Error)
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error al guardar jwt: %v", result.Error))
+		return
 	}
 
 	r.Header.Set("Authentication", token)
