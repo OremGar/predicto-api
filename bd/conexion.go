@@ -3,7 +3,6 @@ package bd
 import (
 	"fmt"
 	"log"
-	"strconv"
 	"time"
 
 	"github.com/OremGar/predicto-api/funciones"
@@ -14,11 +13,11 @@ import (
 
 // Se obtienen las variables del archivo .env
 var (
-	host         = funciones.GetDotEnvVar("HOST")
-	usuario      = funciones.GetDotEnvVar("USUARIO")
-	contrasena   = funciones.GetDotEnvVar("CONTRASENA")
-	base_datos   = funciones.GetDotEnvVar("BASE_DATOS")
-	puerto, _    = strconv.Atoi(funciones.GetDotEnvVar("PUERTO_BD"))
+	//host         = funciones.GetDotEnvVar("HOST")
+	//usuario      = funciones.GetDotEnvVar("USUARIO")
+	//contrasena   = funciones.GetDotEnvVar("CONTRASENA")
+	//base_datos   = funciones.GetDotEnvVar("BASE_DATOS")
+	//puerto, _    = strconv.Atoi(funciones.GetDotEnvVar("PUERTO_BD"))
 	conexion_url = funciones.GetDotEnvVar("URL_BD")
 )
 
@@ -29,7 +28,6 @@ func ConnectDB() *gorm.DB {
 	var dsn string = conexion_url
 	//var dsn string = "host=192.168.1.79 user=orem password=Aut201104  dbname=predicto port=5432  sslmode=disable"
 	DB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	fmt.Println(conexion_url)
 	if err != nil {
 		fmt.Printf("Error en la conexión a la BD %v", err)
 		return nil
@@ -49,7 +47,7 @@ func ConnectDB() *gorm.DB {
 		return nil
 	}
 	if DB.Error != nil {
-		fmt.Printf("Cualquier error en la conexión a la BD %v" + err.Error())
+		fmt.Printf("Cualquier error en la conexión a la BD %v" + DB.Error.Error())
 		return nil
 	}
 	log.Println("Conexión a BD exitosa")
