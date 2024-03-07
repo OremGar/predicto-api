@@ -26,8 +26,8 @@ var (
 func ConnectDB() *gorm.DB {
 	//Connect to DB
 	var DB *gorm.DB
-	var dsn string = conexion_url
-	//var dsn string = fmt.Sprintf("host=%s user=%s password=%s  dbname=%s port=%d  sslmode=disable", host, usuario, contrasena, base_datos, puerto)
+	//var dsn string = conexion_url
+	var dsn string = "host=192.168.1.79 user=orem password=Aut201104  dbname=predicto port=5432  sslmode=disable"
 	DB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
