@@ -53,13 +53,13 @@ func ObtieneVibracionesMotores(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fecInicio, err = time.Parse("2006-01-02", r.FormValue("fec_inicio"))
+	fecInicio, err = time.Parse("2006-01-02", r.FormValue("fecInicio"))
 	if err != nil {
 		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("la fecha de inicio no está en el formato correcto YYYY-MM-DD"))
 		return
 	}
 
-	fecFinal, err = time.Parse("2006-01-02", r.FormValue("fec_fin"))
+	fecFinal, err = time.Parse("2006-01-02", r.FormValue("fecFin"))
 	if err != nil {
 		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("la fecha de fin no está en el formato correcto YYYY-MM-DD"))
 		return
