@@ -26,10 +26,10 @@ var (
 func ConnectDB() *gorm.DB {
 	//Connect to DB
 	var DB *gorm.DB
-	//var dsn string = conexion_url
-	var dsn string = "host=192.168.1.79 user=orem password=Aut201104  dbname=predicto port=5432  sslmode=disable"
+	var dsn string = conexion_url
+	//var dsn string = "host=192.168.1.79 user=orem password=Aut201104  dbname=predicto port=5432  sslmode=disable"
 	DB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-
+	fmt.Println(conexion_url)
 	if err != nil {
 		fmt.Printf("Error en la conexión a la BD %v", err)
 		return nil
