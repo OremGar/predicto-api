@@ -30,7 +30,7 @@ func ObtieneMotores(w http.ResponseWriter, r *http.Request) {
 
 func ObtieneVibracionesMotores(w http.ResponseWriter, r *http.Request) {
 	var motor modelos.Motores = modelos.Motores{}
-	var vibraciones modelos.MotoresVibraciones = modelos.MotoresVibraciones{}
+	var vibraciones []modelos.MotoresVibraciones = []modelos.MotoresVibraciones{}
 
 	var fecInicio time.Time
 	var fecFinal time.Time
