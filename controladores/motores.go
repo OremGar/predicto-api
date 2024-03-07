@@ -19,7 +19,7 @@ func ObtieneMotores(w http.ResponseWriter, r *http.Request) {
 	sqldb, _ := db.DB()
 	defer sqldb.Close()
 
-	resultado := db.Model(&modelos.Motores{}).Select(&motores)
+	resultado := db.Model(&modelos.Motores{}).Find(&motores)
 	if resultado.Error != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error al obtener los motores: %v", resultado.Error))
 		return
