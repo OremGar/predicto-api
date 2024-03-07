@@ -32,6 +32,10 @@ func Router() (http.Handler, *cors.Cors) {
 
 	r.HandleFunc("/api/v1/prueba/saludo", controladores.Prueba).Methods(http.MethodGet)
 
+	//Motores
+	r.HandleFunc("/api/v1/motores", controladores.ObtieneMotores).Methods(http.MethodGet)
+	r.HandleFunc("/api/v1/motores/vibraciones", controladores.ObtieneVibracionesMotores).Methods(http.MethodPatch)
+
 	wrappedMux = middlewares.ValidarToken(r.ServeHTTP)
 	wrappedMux = middlewares.ValidarAdmin(wrappedMux)
 
