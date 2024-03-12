@@ -7,21 +7,21 @@ pipeline {
         string(name: 'puerto_imagen', defaultValue: '8081', description: 'puerto de la imagen')
     }
     environment {
-        name_final = "${nombre_contenedor}${tag_imagen}${puerto_imagen}"        
+        nombre_final = "${nombre_contenedor}${tag_imagen}${puerto_imagen}"        
     }
     stages {
           stage('stop/rm') {
             when {
                 expression { 
-                    DOCKER_EXIST = sh(returnStdout: true, script: 'echo "$(docker ps -q --filter name=${name_final})"').trim()
+                    DOCKER_EXIST = sh(returnStdout: true, script: 'echo "$(docker ps -q --filter name=${nombre_final})"').trim()
                     return  DOCKER_EXIST != '' 
                 }
             }
             steps {
                 script{
                     sh ''' 
-                        sudo docker stop ${name_final}
-                        sudo docker rm -vf ${name_final}
+                        sudo docker stop ${env.nombre_final}
+                        sudo docker rm -vf ${env.nombre_final}
                     '''
                     }
                 }                                   
@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script{
                     sh ''' 
-                        docker run  -dtp ${puerto_imagen}:${puerto_imagen} --name ${name_final} ${nombre_imagen}:${tag_imagen}
+                        docker run  -dtp ${puerto_imagen}:${puerto_imagen} --name ${nombre_final} ${nombre_imagen}:${tag_imagen}
                     '''
                     }
                 }                                  
