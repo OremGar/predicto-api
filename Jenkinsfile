@@ -1,5 +1,5 @@
 pipeline {
-  agent {label "predicto-api-"}
+  agent any
     parameters {
         string(name: 'nombre_contenedor', defaultValue: 'predicto_api_container', description: 'nombre del contenedor')
         string(name: 'nombre_imagen', defaultValue: 'predicto_api', description: 'nombre de la imagen')
