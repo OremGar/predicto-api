@@ -1,8 +1,8 @@
 pipeline {
   agent {label "predicto-api-"}
     parameters {
-        string(name: 'nombre_contenedor', defaultValue: 'predicto-api-container', description: 'nombre del contenedor')
-        string(name: 'nombre_imagen', defaultValue: 'predicto-api', description: 'nombre de la imagen')
+        string(name: 'nombre_contenedor', defaultValue: 'predicto_api_container', description: 'nombre del contenedor')
+        string(name: 'nombre_imagen', defaultValue: 'predicto_api', description: 'nombre de la imagen')
         string(name: 'tag_imagen', defaultValue: 'latest', description: 'etiqueta de la imagen')
         string(name: 'puerto_imagen', defaultValue: '8081', description: 'puerto de la imagen')
     }
