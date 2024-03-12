@@ -20,8 +20,8 @@ pipeline {
             steps {
                 script{
                     sh """
-                        sudo docker stop ${nombre_final}
-                        sudo docker rm -vf ${nombre_final}
+                        docker stop ${nombre_final}
+                        docker rm -vf ${nombre_final}
                     """
                     }
                 }                                   
