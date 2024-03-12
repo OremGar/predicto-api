@@ -59,6 +59,7 @@ func Router() (http.Handler, *cors.Cors) {
 			http.MethodPut,
 			http.MethodDelete,
 			http.MethodOptions,
+			http.MethodPatch,
 		},
 
 		AllowedHeaders: []string{
