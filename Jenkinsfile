@@ -19,10 +19,10 @@ pipeline {
             }
             steps {
                 script{
-                    sh ''' 
-                        sudo docker stop ${env.nombre_final}
-                        sudo docker rm -vf ${env.nombre_final}
-                    '''
+                    sh """\ 
+                        sudo docker stop ${nombre_final} \
+                        sudo docker rm -vf ${nombre_final} \
+                    """
                     }
                 }                                   
             }
