@@ -74,6 +74,10 @@ func Router() (http.Handler, *cors.Cors) {
 func main() {
 	r, corsOpt := Router()
 
+	if PUERTO == "" {
+		PUERTO = "8081"
+	}
+
 	log.Println("Iniciando servidor en el puerto:", PUERTO)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", PUERTO), corsOpt.Handler(r)))
 }
