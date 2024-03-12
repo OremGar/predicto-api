@@ -74,6 +74,7 @@ func Router() (http.Handler, *cors.Cors) {
 func main() {
 	r, corsOpt := Router()
 
+	//Si no se pudo leer el puerto, se autoasigna
 	if PUERTO == "" {
 		PUERTO = "8081"
 	}
