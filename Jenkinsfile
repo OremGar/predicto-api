@@ -4,8 +4,8 @@ pipeline {
         string(name: 'nombre_contenedor', defaultValue: 'predicto_api_container', description: 'nombre del contenedor')
         string(name: 'nombre_imagen', defaultValue: 'predicto_api', description: 'nombre de la imagen')
         string(name: 'tag_imagen', defaultValue: 'latest', description: 'etiqueta de la imagen')
-        string(name: 'puerto_imagen', defaultValue: '8081', description: 'puerto de la imagen')
-        string(name: 'puerto_externo', defaultValue: '8083', description: 'puerto externo')
+        string(name: 'puerto_imagen', defaultValue: '8083', description: 'puerto de la imagen')
+        string(name: 'puerto_externo', defaultValue: '8081', description: 'puerto externo')
     }
     environment {
         nombre_final = "${nombre_contenedor}${tag_imagen}${puerto_imagen}"        
