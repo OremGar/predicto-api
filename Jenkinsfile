@@ -5,6 +5,7 @@ pipeline {
         string(name: 'nombre_imagen', defaultValue: 'predicto_api', description: 'nombre de la imagen')
         string(name: 'tag_imagen', defaultValue: 'latest', description: 'etiqueta de la imagen')
         string(name: 'puerto_imagen', defaultValue: '8081', description: 'puerto de la imagen')
+        string(name: 'puerto_externo', defaultValue: '8083', description: 'puerto externo')
     }
     environment {
         nombre_final = "${nombre_contenedor}${tag_imagen}${puerto_imagen}"        
@@ -29,18 +30,18 @@ pipeline {
         stage('build') {
             steps {
                 script{
-                    sh ''' 
+                    sh """
                     docker build . -t ${nombre_imagen}:${tag_imagen}
-                    '''
+                    """
                     }
                 }                                       
             }
             stage('run') {
             steps {
                 script{
-                    sh ''' 
-                        docker run  -dtp ${puerto_imagen}:${puerto_imagen} --name ${nombre_final} ${nombre_imagen}:${tag_imagen}
-                    '''
+                    sh """ 
+                        docker run  -dtp ${puerto_externo}:${puerto_imagen} --name ${nombre_final} ${nombre_imagen}:${tag_imagen}
+                    """
                     }
                 }                                  
             }
