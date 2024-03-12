@@ -74,7 +74,6 @@ func Router() (http.Handler, *cors.Cors) {
 func main() {
 	r, corsOpt := Router()
 
-	//Nada
 	if PUERTO == "" {
 		PUERTO = "8081"
 	}
