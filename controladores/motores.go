@@ -9,6 +9,7 @@ import (
 	"github.com/OremGar/predicto-api/bd"
 	"github.com/OremGar/predicto-api/modelos"
 	"github.com/OremGar/predicto-api/respuestas"
+	"github.com/gorilla/mux"
 	"gorm.io/gorm"
 )
 
@@ -26,6 +27,50 @@ func ObtieneMotores(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respuestas.JsonResponse(w, http.StatusOK, motores, 0, nil)
+}
+
+func ObtieneVibracionPeriodo(w http.ResponseWriter, r *http.Request) {
+	type Respuesta struct {
+		FechaInicio time.Time
+		FechaFin    time.Time
+	}
+
+	var vars map[string]string = mux.Vars(r)
+
+	var motor modelos.Motores = modelos.Motores{}
+	var err error
+
+	var respuesta Respuesta = Respuesta{}
+
+	var db *gorm.DB = bd.ConnectDB()
+	sqldb, _ := db.DB()
+	defer sqldb.Close()
+
+	motor.Id, err = strconv.Atoi(vars["id"])
+	if err != nil {
+		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el id del motor no está en el formato correcto"))
+		return
+	}
+
+	_, err = modelos.MotorExiste(motor.Id)
+	if err != nil {
+		respuestas.SetError(w, http.StatusBadRequest, 101, err)
+		return
+	}
+
+	result := db.Raw("SELECT hora FROM motores_vibraciones WHERE id_motor = ? ORDER BY hora ASC LIMIT 1", motor.Id).Scan(&respuesta.FechaInicio)
+	if result.Error != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 102, fmt.Errorf("error buscando la fecha del primer paquete: %v", result.Error))
+		return
+	}
+
+	result = db.Raw("SELECT hora FROM motores_vibraciones WHERE id_motor = ? ORDER BY hora DESC LIMIT 1", motor.Id).Scan(&respuesta.FechaFin)
+	if result.Error != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 103, fmt.Errorf("error buscando la fecha del primer paquete: %v", result.Error))
+		return
+	}
+
+	respuestas.JsonResponse(w, http.StatusOK, respuesta, 0, nil)
 }
 
 func ObtieneVibracionesMotores(w http.ResponseWriter, r *http.Request) {
