@@ -66,7 +66,7 @@ func ObtieneVibracionPeriodo(w http.ResponseWriter, r *http.Request) {
 
 	result = db.Raw("SELECT hora FROM motores_vibraciones WHERE id_motor = ? ORDER BY hora DESC LIMIT 1", motor.Id).Scan(&respuesta.FechaFin)
 	if result.Error != nil {
-		respuestas.SetError(w, http.StatusInternalServerError, 103, fmt.Errorf("error buscando la fecha del primer paquete: %v", result.Error))
+		respuestas.SetError(w, http.StatusInternalServerError, 103, fmt.Errorf("error buscando la fecha del segundo paquete: %v", result.Error))
 		return
 	}
 
