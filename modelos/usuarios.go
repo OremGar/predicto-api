@@ -48,8 +48,13 @@ func (UsuariosOtp) TableName() string {
 
 func ChecarSiUsuarioExiste(id int) (Usuarios, error) {
 	var usuario Usuarios = Usuarios{}
+	var err error
 
-	var db *gorm.DB = bd.ConnectDB()
+	var db *gorm.DB
+	db, err = bd.ConnectDB()
+	if err != nil {
+		return Usuarios{}, fmt.Errorf("error en la bd: %v", err)
+	}
 	sqldb, _ := db.DB()
 	defer sqldb.Close()
 
@@ -66,8 +71,13 @@ func ChecarSiUsuarioExiste(id int) (Usuarios, error) {
 
 func ChecarSiOTPValido(codigoOtp string) (bool, UsuariosOtp, error) {
 	var otp UsuariosOtp = UsuariosOtp{}
+	var err error
 
-	var db *gorm.DB = bd.ConnectDB()
+	var db *gorm.DB
+	db, err = bd.ConnectDB()
+	if err != nil {
+		return false, UsuariosOtp{}, fmt.Errorf("error en la bd: %v", err)
+	}
 	sqldb, _ := db.DB()
 	defer sqldb.Close()
 

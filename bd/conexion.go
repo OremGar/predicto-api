@@ -22,7 +22,7 @@ var (
 )
 
 // Función que realiza una conexión a la BD y retorna un objeto para realizar las operaciones con ella
-func ConnectDB() *gorm.DB {
+func ConnectDB() (*gorm.DB, error) {
 	//Connect to DB
 	var DB *gorm.DB
 	var dsn string = conexion_url
@@ -30,26 +30,26 @@ func ConnectDB() *gorm.DB {
 	DB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Printf("Error en la conexión a la BD %v", err)
-		return nil
+		return nil, fmt.Errorf("error interno: %v", err)
 	}
 
 	db, err := DB.DB()
 
 	if err := db.Ping(); err != nil {
 		log.Fatalln("Error haciendo ping en la BD  " + err.Error())
-		return nil
+		return nil, fmt.Errorf("error interno: %v", err)
 	}
 
 	db.SetConnMaxIdleTime(time.Minute * 5)
 	//Se validan las conexiones a la BD
 	if err != nil {
 		fmt.Printf("Error en la conexión a la BD %v", err)
-		return nil
+		return nil, fmt.Errorf("error interno: %v", err)
 	}
 	if DB.Error != nil {
 		fmt.Printf("Cualquier error en la conexión a la BD %v" + DB.Error.Error())
-		return nil
+		return nil, fmt.Errorf("error interno: %v", err)
 	}
 	log.Println("Conexión a BD exitosa")
-	return DB
+	return DB, nil
 }

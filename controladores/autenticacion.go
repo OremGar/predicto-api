@@ -20,9 +20,15 @@ import (
 func SignUp(w http.ResponseWriter, r *http.Request) {
 	var usuario modelos.Usuarios = modelos.Usuarios{}
 	var existe bool
+	var err error
 
 	//Objeto conector de base de datos
-	var db *gorm.DB = bd.ConnectDB()
+	var db *gorm.DB
+	db, err = bd.ConnectDB()
+	if err != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error en la bd: %v", err))
+		return
+	}
 	sqldb, _ := db.DB()
 	defer sqldb.Close()
 
@@ -30,7 +36,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	usuario.Nombre = r.FormValue("nombre")
 	usuario.Apellidos = r.FormValue("apellidos")
 	usuario.Correo = r.FormValue("correo")
-	_, err := mail.ParseAddress(usuario.Correo)
+	_, err = mail.ParseAddress(usuario.Correo)
 	if err != nil {
 		respuestas.SetError(w, http.StatusBadRequest, 104, fmt.Errorf("el correo no está en el formato correcto"))
 		return
@@ -90,13 +96,19 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 	var usuarioOtp = modelos.UsuariosOtp{}
 	var registroJWT modelos.UsuariosJwt = modelos.UsuariosJwt{}
 
+	var err error
 	var detect *mobiledetect.MobileDetect = mobiledetect.NewMobileDetect(r, nil) //Objeto que evalua si la petición es realizada por un dispositivo móvil
 
 	usuario.Usuario = r.FormValue("usuario")
 	usuario.Correo = r.FormValue("correo")
 
 	//Objeto conector de BD
-	var db *gorm.DB = bd.ConnectDB()
+	var db *gorm.DB
+	db, err = bd.ConnectDB()
+	if err != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error en la bd: %v", err))
+		return
+	}
 	sqldb, _ := db.DB()
 	defer sqldb.Close()
 
@@ -147,7 +159,7 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 	codigoOTP = funciones.GeneraOTP(6)
 
 	//Envío de OTP por correo
-	err := funciones.EnviaCorreoOTPLogin(usuario.Correo, codigoOTP)
+	err = funciones.EnviaCorreoOTPLogin(usuario.Correo, codigoOTP)
 	if err != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error al enviar correo: %v", err))
 		return
@@ -172,8 +184,14 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 func ValidaOtpLogin(w http.ResponseWriter, r *http.Request) {
 	var codigoOTP string = r.FormValue("codigoOtp")
 	var registroJWT modelos.UsuariosJwt = modelos.UsuariosJwt{}
+	var err error
 
-	var db *gorm.DB = bd.ConnectDB()
+	var db *gorm.DB
+	db, err = bd.ConnectDB()
+	if err != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error en la bd: %v", err))
+		return
+	}
 	sqldb, _ := db.DB()
 	defer sqldb.Close()
 
@@ -217,8 +235,14 @@ func RecuperaContrasena(w http.ResponseWriter, r *http.Request) {
 	var usuario modelos.Usuarios = modelos.Usuarios{}
 	var usuarioOtp modelos.UsuariosOtp = modelos.UsuariosOtp{}
 	var otp string
+	var err error
 
-	var db *gorm.DB = bd.ConnectDB()
+	var db *gorm.DB
+	db, err = bd.ConnectDB()
+	if err != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error en la bd: %v", err))
+		return
+	}
 	sqldb, _ := db.DB()
 	defer sqldb.Close()
 
@@ -238,7 +262,7 @@ func RecuperaContrasena(w http.ResponseWriter, r *http.Request) {
 	}
 
 	otp = funciones.GeneraOTP(12)
-	err := funciones.EnviaCorreoOTPContrasena(correo, otp)
+	err = funciones.EnviaCorreoOTPContrasena(correo, otp)
 	if err != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error al enviar correo: %v", err))
 		return
@@ -262,8 +286,14 @@ func RecuperaContrasena(w http.ResponseWriter, r *http.Request) {
 func NuevaContrasena(w http.ResponseWriter, r *http.Request) {
 	var nuevaContrasena string = r.FormValue("nuevaContrasena")
 	var otp string = r.FormValue("otp")
+	var err error
 
-	var db *gorm.DB = bd.ConnectDB()
+	var db *gorm.DB
+	db, err = bd.ConnectDB()
+	if err != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error en la bd: %v", err))
+		return
+	}
 	sqldb, _ := db.DB()
 	defer sqldb.Close()
 
@@ -298,8 +328,14 @@ func ValidaOTPNvaContrasena(w http.ResponseWriter, r *http.Request) {
 	var vars map[string]string = mux.Vars(r)
 	var codigoOTP string = vars["codigo"]
 	var usuarioOTP modelos.UsuariosOtp = modelos.UsuariosOtp{}
+	var err error
 
-	var db *gorm.DB = bd.ConnectDB()
+	var db *gorm.DB
+	db, err = bd.ConnectDB()
+	if err != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error en la bd: %v", err))
+		return
+	}
 	sqldb, _ := db.DB()
 	defer sqldb.Close()
 

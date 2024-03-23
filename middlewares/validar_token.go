@@ -18,8 +18,14 @@ func ValidarToken(peticion http.HandlerFunc) http.Handler {
 		var token string = r.Header.Get("Authorization") //Se obtiene el token del encabezado
 		var usuario modelos.Usuarios                     //Objeto usuario
 		var existe bool                                  //Booleano para válidar existencia
+		var err error
 
-		var db *gorm.DB = bd.ConnectDB() //Objeto para conexión y operaciones a la BD
+		var db *gorm.DB
+		db, err = bd.ConnectDB()
+		if err != nil {
+			respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error en la bd: %v", err))
+			return
+		}
 		sqldb, _ := db.DB()
 		defer sqldb.Close()
 

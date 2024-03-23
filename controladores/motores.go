@@ -15,8 +15,14 @@ import (
 
 func ObtieneMotores(w http.ResponseWriter, r *http.Request) {
 	var motores []modelos.Motores = []modelos.Motores{}
+	var err error
 
-	var db *gorm.DB = bd.ConnectDB()
+	var db *gorm.DB
+	db, err = bd.ConnectDB()
+	if err != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error en la bd: %v", err))
+		return
+	}
 	sqldb, _ := db.DB()
 	defer sqldb.Close()
 
@@ -42,7 +48,12 @@ func ObtieneVibracionPeriodo(w http.ResponseWriter, r *http.Request) {
 
 	var respuesta Respuesta = Respuesta{}
 
-	var db *gorm.DB = bd.ConnectDB()
+	var db *gorm.DB
+	db, err = bd.ConnectDB()
+	if err != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error en la bd: %v", err))
+		return
+	}
 	sqldb, _ := db.DB()
 	defer sqldb.Close()
 
@@ -82,7 +93,12 @@ func ObtieneVibracionesMotores(w http.ResponseWriter, r *http.Request) {
 
 	var err error
 
-	var db *gorm.DB = bd.ConnectDB()
+	var db *gorm.DB
+	db, err = bd.ConnectDB()
+	if err != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error en la bd: %v", err))
+		return
+	}
 	sqldb, _ := db.DB()
 	defer sqldb.Close()
 

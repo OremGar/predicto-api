@@ -31,8 +31,13 @@ type MotoresVibraciones struct {
 
 func MotorExiste(id int) (Motores, error) {
 	var motor Motores = Motores{}
+	var err error
 
-	var db *gorm.DB = bd.ConnectDB()
+	var db *gorm.DB
+	db, err = bd.ConnectDB()
+	if err != nil {
+		return Motores{}, fmt.Errorf("error en la bd: %v", err)
+	}
 	sqldb, _ := db.DB()
 	defer sqldb.Close()
 

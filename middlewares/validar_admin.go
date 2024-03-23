@@ -17,8 +17,14 @@ func ValidarAdmin(peticion http.Handler) http.Handler {
 		var token string = r.Header.Get("Authorization")
 		var usuario modelos.Usuarios
 		var existe bool
+		var err error
 
-		var db *gorm.DB = bd.ConnectDB()
+		var db *gorm.DB
+		db, err = bd.ConnectDB()
+		if err != nil {
+			respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error en la bd: %v", err))
+			return
+		}
 		sqldb, _ := db.DB()
 		defer sqldb.Close()
 
