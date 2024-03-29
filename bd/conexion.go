@@ -13,11 +13,6 @@ import (
 
 // Se obtienen las variables del archivo .env
 var (
-	//host         = funciones.GetDotEnvVar("HOST")
-	//usuario      = funciones.GetDotEnvVar("USUARIO")
-	//contrasena   = funciones.GetDotEnvVar("CONTRASENA")
-	//base_datos   = funciones.GetDotEnvVar("BASE_DATOS")
-	//puerto, _    = strconv.Atoi(funciones.GetDotEnvVar("PUERTO_BD"))
 	conexion_url = funciones.GetDotEnvVar("URL_BD")
 )
 
