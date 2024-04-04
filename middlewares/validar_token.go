@@ -63,7 +63,7 @@ func ValidarToken(peticion http.HandlerFunc) http.Handler {
 		}
 
 		//Si hay tokens más nuevos que el de la consulta, entonces no se permite el acceso porque significa que ya se inició sesión en otros dispositivos
-		result = db.Raw("SELECT count(*) > 0 FROM usuarios_jwt WHERE id_usuario = ? AND fecha_inicio > (SELECT fecha_inicio FROM usuarios_jwt WHERE token = ?)", usuario.Id, token).Find(&existe)
+		result = db.Raw("SELECT count(*) > 0 FROM usuarios_jwt WHERE id_usuario = ? AND fecha_inicio > (SELECT fecha_inicio FROM usuarios_jwt WHERE token = ? LIMIT 1)", usuario.Id, token).Find(&existe)
 		if result.Error != nil {
 			respuestas.SetError(w, http.StatusInternalServerError, 100, result.Error)
 			return
