@@ -15,9 +15,9 @@ import (
 
 func ObtieneMotores(w http.ResponseWriter, r *http.Request) {
 	type respuestaStruct struct {
-		Motor       modelos.Motores
-		FechaInicio time.Time
-		FechaFin    time.Time
+		Motor       modelos.Motores `json:"motor"`
+		FechaInicio time.Time       `json:"fecha_inicio"`
+		FechaFin    time.Time       `json:"fecha_fin"`
 	}
 
 	var motores []modelos.Motores = []modelos.Motores{}
