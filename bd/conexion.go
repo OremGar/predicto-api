@@ -16,7 +16,7 @@ var (
 	conexion_url = funciones.GetDotEnvVar("URL_BD")
 )
 
-// Función que realiza una conexión a la BD y retorna un objeto para realizar las operaciones con ella
+// Función que realiza una conexión a la BD y retorna un objeto para realizar las operaciones
 func ConnectDB() (*gorm.DB, error) {
 	var DB *gorm.DB
 	var dsn string = conexion_url
