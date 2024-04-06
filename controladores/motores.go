@@ -14,8 +14,15 @@ import (
 )
 
 func ObtieneMotores(w http.ResponseWriter, r *http.Request) {
+	type respuestaStruct struct {
+		Motor       modelos.Motores
+		FechaInicio time.Time
+		FechaFin    time.Time
+	}
+
 	var motores []modelos.Motores = []modelos.Motores{}
 	var err error
+	var respuesta []respuestaStruct
 
 	var db *gorm.DB
 	db, err = bd.ConnectDB()
@@ -32,7 +39,26 @@ func ObtieneMotores(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	respuestas.JsonResponse(w, http.StatusOK, motores, 0, nil)
+	for _, motor := range motores {
+		var elemento respuestaStruct = respuestaStruct{}
+		elemento.Motor = motor
+
+		result := db.Raw("SELECT hora FROM motores_vibraciones WHERE id_motor = ? ORDER BY hora ASC LIMIT 1", motor.Id).Scan(&elemento.FechaInicio)
+		if result.Error != nil {
+			respuestas.SetError(w, http.StatusInternalServerError, 102, fmt.Errorf("error buscando la fecha del primer paquete: %v", result.Error))
+			return
+		}
+
+		result = db.Raw("SELECT hora FROM motores_vibraciones WHERE id_motor = ? ORDER BY hora DESC LIMIT 1", motor.Id).Scan(&elemento.FechaFin)
+		if result.Error != nil {
+			respuestas.SetError(w, http.StatusInternalServerError, 103, fmt.Errorf("error buscando la fecha del segundo paquete: %v", result.Error))
+			return
+		}
+
+		respuesta = append(respuesta, elemento)
+	}
+
+	respuestas.JsonResponse(w, http.StatusOK, respuesta, 0, nil)
 }
 
 func ObtieneVibracionPeriodo(w http.ResponseWriter, r *http.Request) {
