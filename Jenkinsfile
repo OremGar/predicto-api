@@ -8,7 +8,7 @@ pipeline {
         string(name: 'puerto_externo', defaultValue: '8083', description: 'puerto externo')
     }
     environment {
-        nombre_final = "${nombre_contenedor}${tag_imagen}${puerto_imagen}"        
+        nombre_final = "${nombre_contenedor}"        
     }
     stages {
           stage('stop/rm') {
