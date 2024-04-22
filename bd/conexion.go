@@ -3,7 +3,6 @@ package bd
 import (
 	"fmt"
 	"log"
-	"strconv"
 	"time"
 
 	"github.com/OremGar/predicto-api/funciones"
@@ -14,44 +13,37 @@ import (
 
 // Se obtienen las variables del archivo .env
 var (
-	host         = funciones.GetDotEnvVar("HOST")
-	usuario      = funciones.GetDotEnvVar("USUARIO")
-	contrasena   = funciones.GetDotEnvVar("CONTRASENA")
-	base_datos   = funciones.GetDotEnvVar("BASE_DATOS")
-	puerto, _    = strconv.Atoi(funciones.GetDotEnvVar("PUERTO_BD"))
 	conexion_url = funciones.GetDotEnvVar("URL_BD")
 )
 
-// Función que realiza una conexión a la BD y retorna un objeto para realizar las operaciones con ella
-func ConnectDB() *gorm.DB {
-	//Connect to DB
+// Función que realiza una conexión a la BD y retorna un objeto para realizar las operaciones
+func ConnectDB() (*gorm.DB, error) {
 	var DB *gorm.DB
 	var dsn string = conexion_url
-	//var dsn string = fmt.Sprintf("host=%s user=%s password=%s  dbname=%s port=%d  sslmode=disable", host, usuario, contrasena, base_datos, puerto)
+	//var dsn string = "host=192.168.1.79 user=orem password=Aut201104  dbname=predicto port=5432  sslmode=disable"
 	DB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-
 	if err != nil {
 		fmt.Printf("Error en la conexión a la BD %v", err)
-		return nil
+		return nil, fmt.Errorf("error interno: %v", err)
 	}
 
 	db, err := DB.DB()
 
 	if err := db.Ping(); err != nil {
 		log.Fatalln("Error haciendo ping en la BD  " + err.Error())
-		return nil
+		return nil, fmt.Errorf("error interno: %v", err)
 	}
 
 	db.SetConnMaxIdleTime(time.Minute * 5)
 	//Se validan las conexiones a la BD
 	if err != nil {
 		fmt.Printf("Error en la conexión a la BD %v", err)
-		return nil
+		return nil, fmt.Errorf("error interno: %v", err)
 	}
 	if DB.Error != nil {
-		fmt.Printf("Cualquier error en la conexión a la BD %v" + err.Error())
-		return nil
+		fmt.Printf("Cualquier error en la conexión a la BD %v" + DB.Error.Error())
+		return nil, fmt.Errorf("error interno: %v", err)
 	}
 	log.Println("Conexión a BD exitosa")
-	return DB
+	return DB, nil
 }

@@ -8,28 +8,53 @@ import (
 	"gorm.io/gorm"
 )
 
+const (
+	TIPO_USUARIO_ADMIN                 string = "administrador"
+	TIPO_USUARIO_USUARIO               string = "usuario"
+	TIPO_USUARIO_USUARIO_ADMINISTRADOR string = "usuario_administrador"
+)
+
 // Modelos
 type Usuarios struct {
-	Id         int
-	Nombre     string
-	Apellidos  string
-	Usuario    string
-	Correo     string
-	Contrasena string
-	Telefono   string
+	Id         int    `json:"id"`
+	Nombre     string `json:"nombre"`
+	Apellidos  string `json:"apellidos"`
+	Usuario    string `json:"usuario"`
+	Correo     string `json:"correo"`
+	Contrasena string `json:"contrasena"`
+	Telefono   string `json:"telefono"`
+}
+
+type UsuariosJwt struct {
+	IdUsuario   int       `json:"id_usuario"`
+	Token       string    `json:"token"`
+	FechaInicio time.Time `json:"fecha_inicio"`
+}
+
+type UsuariosOtp struct {
+	IdUsuario     int       `json:"id_usuario"`
+	CodigoOtp     string    `json:"codigo_otp"`
+	FechaCreacion time.Time `json:"fecha_creacion"`
 }
 
 // Métodos
-type UsuariosJwt struct {
-	IdUsuario   int
-	Token       string
-	FechaInicio time.Time
+func (UsuariosJwt) TableName() string {
+	return "usuarios_jwt"
+}
+
+func (UsuariosOtp) TableName() string {
+	return "usuarios_otp"
 }
 
 func ChecarSiUsuarioExiste(id int) (Usuarios, error) {
 	var usuario Usuarios = Usuarios{}
+	var err error
 
-	var db *gorm.DB = bd.ConnectDB()
+	var db *gorm.DB
+	db, err = bd.ConnectDB()
+	if err != nil {
+		return Usuarios{}, fmt.Errorf("error en la bd: %v", err)
+	}
 	sqldb, _ := db.DB()
 	defer sqldb.Close()
 
@@ -42,6 +67,34 @@ func ChecarSiUsuarioExiste(id int) (Usuarios, error) {
 	}
 
 	return usuario, nil
+}
+
+func ChecarSiOTPValido(codigoOtp string) (bool, UsuariosOtp, error) {
+	var otp UsuariosOtp = UsuariosOtp{}
+	var err error
+
+	var db *gorm.DB
+	db, err = bd.ConnectDB()
+	if err != nil {
+		return false, UsuariosOtp{}, fmt.Errorf("error en la bd: %v", err)
+	}
+	sqldb, _ := db.DB()
+	defer sqldb.Close()
+
+	result := db.Model(&otp).Where("codigo_otp = ?", codigoOtp).First(&otp)
+	if result.Error != nil {
+		if result.Error == gorm.ErrRecordNotFound {
+			return false, UsuariosOtp{}, fmt.Errorf("el código otp no existe")
+		} else {
+			return false, UsuariosOtp{}, result.Error
+		}
+	}
+
+	if otp.FechaCreacion.Add(time.Hour * 3).Before(time.Now()) {
+		return false, UsuariosOtp{}, fmt.Errorf("el codigo otp ya expiró")
+	}
+
+	return true, otp, nil
 }
 
 // Función para validar que el objeto usuario no le falte nada
