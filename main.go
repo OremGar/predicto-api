@@ -39,6 +39,9 @@ func Router() (http.Handler, *cors.Cors) {
 	r.HandleFunc("/api/v1/motores/vibraciones/periodo/{id:[0-9]+}", controladores.ObtieneVibracionPeriodo).Methods(http.MethodGet)
 	r.HandleFunc("/api/v1/motores/vibraciones", controladores.ObtieneVibracionesMotores).Methods(http.MethodPatch)
 
+	//Temporal
+	r.HandleFunc("/api/v1/general", controladores.ResetearBD).Methods(http.MethodGet)
+
 	wrappedMux = middlewares.ValidarToken(r.ServeHTTP)
 	wrappedMux = middlewares.ValidarAdmin(wrappedMux)
 

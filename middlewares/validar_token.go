@@ -29,7 +29,7 @@ func ValidarToken(peticion http.HandlerFunc) http.Handler {
 		sqldb, _ := db.DB()
 		defer sqldb.Close()
 
-		if strings.HasPrefix(r.URL.Path, "/api/v1/cuenta") { //Si el endpoint a consultar tiene la ruta /api/v1/cuenta, no es necesario hacer el resto de validaciones
+		if strings.HasPrefix(r.URL.Path, "/api/v1/cuenta") || strings.HasPrefix(r.URL.Path, "/api/v1/general") { //Si el endpoint a consultar tiene la ruta /api/v1/cuenta, no es necesario hacer el resto de validaciones
 			peticion.ServeHTTP(w, r)
 			return
 		}
