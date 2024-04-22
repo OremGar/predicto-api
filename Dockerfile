@@ -1,12 +1,9 @@
 #Imagen a descargar
 FROM golang:1.22
 
-<<<<<<< HEAD
-=======
 #Se configura la zona horaria
 ENV TZ="America/Mexico_City"
 
->>>>>>> dev
 #Se actualiza el contenedor
 RUN apt-get update
 
