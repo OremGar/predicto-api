@@ -47,13 +47,7 @@ func Router() (http.Handler, *cors.Cors) {
 
 	corsOpc = cors.New(cors.Options{
 		AllowedOrigins: []string{
-			"http://predicto.ddns.net:8080",
-			"http://predicto.ddns.net:8081",
-			"http://predicto.ddns.net:8083",
-			"https://predicto.ddns.net:8080",
-			"https://predicto.ddns.net:8081",
-			"https://predicto.ddns.net:8083",
-			"http://192.168.1.25:8080",
+			"http://predicto.ddns.net",
 			"http://localhost:3000",
 			"*",
 		},
