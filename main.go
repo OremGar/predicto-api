@@ -40,7 +40,7 @@ func Router() (http.Handler, *cors.Cors) {
 	r.HandleFunc("/api/v1/motores/vibraciones", controladores.ObtieneVibracionesMotores).Methods(http.MethodPatch)
 
 	//Firebase
-	r.HandleFunc("/api/v1/guardaToken", controladores.GuardaTokenFirebase).Methods(http.MethodPost)
+	r.HandleFunc("/api/v1/GuardaTokenFB", controladores.GuardaTokenFirebase).Methods(http.MethodPost)
 
 	//Temporal
 	r.HandleFunc("/api/v1/general", controladores.ResetearBD).Methods(http.MethodGet)
