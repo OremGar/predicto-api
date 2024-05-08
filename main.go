@@ -48,6 +48,7 @@ func Router() (http.Handler, *cors.Cors) {
 	wrappedMux = middlewares.ValidarToken(r.ServeHTTP)
 	wrappedMux = middlewares.ValidarAdmin(wrappedMux)
 
+	//CORS
 	corsOpc = cors.New(cors.Options{
 		AllowedOrigins: []string{
 			"http://predicto.ddns.net",
