@@ -32,12 +32,14 @@ func Router() (http.Handler, *cors.Cors) {
 
 	r.HandleFunc("/api/v1/prueba/saludo", controladores.Prueba).Methods(http.MethodGet)
 
-	//Comentario
-
 	//Motores
 	r.HandleFunc("/api/v1/motores", controladores.ObtieneMotores).Methods(http.MethodGet)
 	r.HandleFunc("/api/v1/motores/vibraciones/periodo/{id:[0-9]+}", controladores.ObtieneVibracionPeriodo).Methods(http.MethodGet)
 	r.HandleFunc("/api/v1/motores/vibraciones", controladores.ObtieneVibracionesMotores).Methods(http.MethodPatch)
+
+	//Tolerancia
+	r.HandleFunc("/api/v1/motores/tolerancia/{id:[0-9]+}", controladores.ObtenerTolerancias).Methods(http.MethodGet)
+	r.HandleFunc("/api/v1/motores/tolerancia/{id:[0-9]+}", controladores.ActualizaTolerancia).Methods(http.MethodPost)
 
 	//Firebase
 	r.HandleFunc("/api/v1/GuardaTokenFB", controladores.GuardaTokenFirebase).Methods(http.MethodPost)
