@@ -39,7 +39,7 @@ func Router() (http.Handler, *cors.Cors) {
 
 	//Tolerancia
 	r.HandleFunc("/api/v1/motores/tolerancia/{id:[0-9]+}", controladores.ObtenerTolerancias).Methods(http.MethodGet)
-	r.HandleFunc("/api/v1/motores/tolerancia/{id:[0-9]+}", controladores.ActualizaTolerancia).Methods(http.MethodPost)
+	r.HandleFunc("/api/v1/motores/tolerancia/{id:[0-9]+}", controladores.ActualizaTolerancia).Methods(http.MethodPut)
 
 	//Firebase
 	r.HandleFunc("/api/v1/GuardaTokenFB", controladores.GuardaTokenFirebase).Methods(http.MethodPost)

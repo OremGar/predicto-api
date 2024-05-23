@@ -33,7 +33,7 @@ func ObtenerTolerancias(w http.ResponseWriter, r *http.Request) {
 
 	motor.Id, err = strconv.Atoi(vars["id"])
 	if err != nil {
-		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("id de motor no esta en el formato correcto"))
+		respuestas.SetError(w, http.StatusBadRequest, 101, fmt.Errorf("id de motor no esta en el formato correcto"))
 		return
 	}
 
@@ -46,10 +46,10 @@ func ObtenerTolerancias(w http.ResponseWriter, r *http.Request) {
 	result = db.Model(&modelos.Tolerancia{}).Where("id_motor = ?", motor.Id).First(&tolerancia)
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
-			respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("no existe tolerancia para este motor"))
+			respuestas.SetError(w, http.StatusBadRequest, 102, fmt.Errorf("no existe tolerancia para este motor"))
 			return
 		}
-		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("internal error"))
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error interno"))
 		return
 	}
 
@@ -77,7 +77,7 @@ func ActualizaTolerancia(w http.ResponseWriter, r *http.Request) {
 
 	motor.Id, err = strconv.Atoi(vars["id"])
 	if err != nil {
-		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("id de motor no esta en el formato correcto"))
+		respuestas.SetError(w, http.StatusBadRequest, 101, fmt.Errorf("id de motor no esta en el formato correcto"))
 		return
 	}
 
@@ -90,7 +90,7 @@ func ActualizaTolerancia(w http.ResponseWriter, r *http.Request) {
 	result = db.Model(&modelos.Tolerancia{}).Where("id_motor = ?", motor.Id).First(&tolerancia)
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
-			respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("no existe tolerancia para este motor"))
+			respuestas.SetError(w, http.StatusBadRequest, 102, fmt.Errorf("no existe tolerancia para este motor"))
 			return
 		}
 		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("internal error"))
@@ -111,7 +111,7 @@ func ActualizaTolerancia(w http.ResponseWriter, r *http.Request) {
 		tolerancia.RollMin = -modelos.GRAVITACION_SENSIBILIDAD_ALTA
 
 	default:
-		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("roll: valor incorrecto"))
+		respuestas.SetError(w, http.StatusBadRequest, 103, fmt.Errorf("roll: valor incorrecto"))
 	}
 
 	switch r.FormValue("pitch") {
@@ -128,14 +128,14 @@ func ActualizaTolerancia(w http.ResponseWriter, r *http.Request) {
 		tolerancia.PitchMin = -modelos.GRAVITACION_SENSIBILIDAD_ALTA
 
 	default:
-		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("pitch: valor incorrecto"))
+		respuestas.SetError(w, http.StatusBadRequest, 104, fmt.Errorf("pitch: valor incorrecto"))
 	}
 
 	if r.FormValue("temp") != "" {
 		var tmp float64
 		tmp, err = strconv.ParseFloat(r.FormValue("temp"), 32)
 		if err != nil {
-			respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("temperatura no está en el formato correcto"))
+			respuestas.SetError(w, http.StatusBadRequest, 105, fmt.Errorf("temperatura no está en el formato correcto"))
 			return
 		}
 
