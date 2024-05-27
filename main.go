@@ -41,6 +41,13 @@ func Router() (http.Handler, *cors.Cors) {
 	r.HandleFunc("/api/v1/motores/tolerancia/{id:[0-9]+}", controladores.ObtenerTolerancias).Methods(http.MethodGet)
 	r.HandleFunc("/api/v1/motores/tolerancia/{id:[0-9]+}", controladores.ActualizaTolerancia).Methods(http.MethodPut)
 
+	//Anomalías
+	r.HandleFunc("/api/v1/motores/anomalías/{id:[0-9]+}", controladores.ObtieneAnomalias).Methods(http.MethodGet)
+
+	//Gravitaciones
+	r.HandleFunc("/api/v1/motores/gravitaciones/{id:[0-9]+}", controladores.ObtieneGravitaciones).Methods(http.MethodGet)
+	r.HandleFunc("/api/v1/motores/gravitacion/{id:[0-9]+}", controladores.ObtieneGravitacion).Methods(http.MethodGet)
+
 	//Firebase
 	r.HandleFunc("/api/v1/GuardaTokenFB", controladores.GuardaTokenFirebase).Methods(http.MethodPost)
 

@@ -26,7 +26,6 @@ type MotoresVibraciones struct {
 	EjeX    float64   `json:"eje_x"`
 	EjeY    float64   `json:"eje_y"`
 	EjeZ    float64   `json:"eje_z"`
-	Falla   float64   `json:"falla"`
 }
 
 func MotorExiste(id int) (Motores, error) {
