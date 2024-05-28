@@ -76,11 +76,15 @@ func ObtieneGravitacion(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result = db.Model(&modelos.Gravitacion{}).Where("id = ?", gravitacion.Id).Find(&gravitacion)
+	result = db.Model(&modelos.Gravitacion{}).Where("id = ?", gravitacion.Id).Limit(1).Find(&gravitacion)
 	if result.Error != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error interno"))
 		return
 	}
 
+	if result.RowsAffected == 0 {
+		respuestas.JsonResponse(w, http.StatusOK, nil, 0, nil)
+		return
+	}
 	respuestas.JsonResponse(w, http.StatusOK, gravitacion, 0, nil)
 }
