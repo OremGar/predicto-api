@@ -40,7 +40,7 @@ pipeline {
             steps {
                 script{
                     sh """ 
-                        docker run  -dtp ${puerto_externo}:${puerto_imagen} --name ${nombre_final} ${nombre_imagen}:${tag_imagen}
+                        docker run  -dtp ${puerto_externo}:${puerto_imagen}  --net predicto_subnet --ip 172.18.0.22 --name ${nombre_final} ${nombre_imagen}:${tag_imagen}
                     """
                     }
                 }                                  
