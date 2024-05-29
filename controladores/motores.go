@@ -18,7 +18,7 @@ func ObtieneMotores(w http.ResponseWriter, r *http.Request) {
 		Motor       modelos.Motores `json:"motor"`
 		FechaInicio time.Time       `json:"fecha_inicio"`
 		FechaFin    time.Time       `json:"fecha_fin"`
-		Estado      string
+		Estado      string          `json:"estado"`
 	}
 
 	var motores []modelos.Motores = []modelos.Motores{}
