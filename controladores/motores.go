@@ -18,6 +18,7 @@ func ObtieneMotores(w http.ResponseWriter, r *http.Request) {
 		Motor       modelos.Motores `json:"motor"`
 		FechaInicio time.Time       `json:"fecha_inicio"`
 		FechaFin    time.Time       `json:"fecha_fin"`
+		Estado      string
 	}
 
 	var motores []modelos.Motores = []modelos.Motores{}
@@ -52,6 +53,12 @@ func ObtieneMotores(w http.ResponseWriter, r *http.Request) {
 		result = db.Raw("SELECT hora FROM motores_vibraciones WHERE id_motor = ? ORDER BY hora DESC LIMIT 1", motor.Id).Scan(&elemento.FechaFin)
 		if result.Error != nil {
 			respuestas.SetError(w, http.StatusInternalServerError, 103, fmt.Errorf("error buscando la fecha del segundo paquete: %v", result.Error))
+			return
+		}
+
+		result = db.Raw("SELECT estado FROM motores_estados WHERE id_motor = ? ORDER BY fecha DESC LIMIT 1", motor.Id).Scan(&elemento.Estado)
+		if result.Error != nil {
+			respuestas.SetError(w, http.StatusInternalServerError, 104, fmt.Errorf("error buscando el estado del motor: %v", result.Error))
 			return
 		}
 
@@ -159,4 +166,41 @@ func ObtieneVibracionesMotores(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respuestas.JsonResponse(w, http.StatusOK, vibraciones, 0, nil)
+}
+
+func ObtieneEstados(w http.ResponseWriter, r *http.Request) {
+	var vars map[string]string = mux.Vars(r)
+
+	var motor modelos.Motores = modelos.Motores{}
+	var estados []modelos.MotoresEstados = []modelos.MotoresEstados{}
+	var err error
+
+	var db *gorm.DB
+	db, err = bd.ConnectDB()
+	if err != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error en la bd: %v", err))
+		return
+	}
+	sqldb, _ := db.DB()
+	defer sqldb.Close()
+
+	motor.Id, err = strconv.Atoi(vars["id"])
+	if err != nil {
+		respuestas.SetError(w, http.StatusBadRequest, 100, fmt.Errorf("el id del motor no está en el formato correcto"))
+		return
+	}
+
+	_, err = modelos.MotorExiste(motor.Id)
+	if err != nil {
+		respuestas.SetError(w, http.StatusBadRequest, 101, err)
+		return
+	}
+
+	result := db.Model(&modelos.MotoresEstados{}).Order("fecha DESC").Where("id_motor = ?", motor.Id).Find(&estados)
+	if result.Error != nil {
+		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error interno"))
+		return
+	}
+
+	respuestas.JsonResponse(w, http.StatusOK, estados, 0, nil)
 }

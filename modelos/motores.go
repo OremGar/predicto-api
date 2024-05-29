@@ -28,6 +28,14 @@ type MotoresVibraciones struct {
 	EjeZ    float64   `json:"eje_z"`
 }
 
+type MotoresEstados struct {
+	Id       int       `json:"id"`
+	IdMotor  int       `json:"id_motor"`
+	Fecha    time.Time `json:"fecha"`
+	Estado   string    `json:"estado"`
+	Contador string    `json:"-"`
+}
+
 func MotorExiste(id int) (Motores, error) {
 	var motor Motores = Motores{}
 	var err error
