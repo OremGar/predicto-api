@@ -49,6 +49,8 @@ func ObtieneGravitaciones(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println(gravitaciones)
+
 	respuestas.JsonResponse(w, http.StatusOK, gravitaciones, 0, nil)
 }
 
