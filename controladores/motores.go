@@ -56,7 +56,7 @@ func ObtieneMotores(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		result = db.Raw("SELECT estado FROM motores_estados WHERE id_motor = ? ORDER BY fecha DESC LIMIT 1", motor.Id).Scan(&elemento.Estado)
+		result = db.Raw("SELECT estado FROM motores_estados WHERE id_motor = ? ORDER BY fecha DESC, id DESC LIMIT 1", motor.Id).Scan(&elemento.Estado)
 		if result.Error != nil {
 			respuestas.SetError(w, http.StatusInternalServerError, 104, fmt.Errorf("error buscando el estado del motor: %v", result.Error))
 			return
@@ -196,7 +196,7 @@ func ObtieneEstados(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result := db.Model(&modelos.MotoresEstados{}).Order("fecha DESC").Where("id_motor = ?", motor.Id).Find(&estados)
+	result := db.Model(&modelos.MotoresEstados{}).Order("fecha DESC, id DESC").Where("id_motor = ?", motor.Id).Find(&estados)
 	if result.Error != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error interno"))
 		return
