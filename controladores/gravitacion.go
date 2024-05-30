@@ -43,7 +43,7 @@ func ObtieneGravitaciones(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result = db.Model(&modelos.Gravitacion{}).Order("fecha DESC").Where("id_motor = ?", motor.Id).Find(&gravitaciones)
+	result = db.Model(&modelos.Gravitacion{}).Order("fecha DESC").Where("id_motor = ?", motor.Id).Limit(10).Find(&gravitaciones)
 	if result.Error != nil {
 		respuestas.SetError(w, http.StatusInternalServerError, 100, fmt.Errorf("error interno"))
 		return
